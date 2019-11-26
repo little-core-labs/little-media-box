@@ -9,7 +9,6 @@ class Source {
 
   getProperties(opts = {}) {
     ffmpeg(this.uri).ffprobe((err, data) => {
-      console.log(err, data)
       this.properties = data
       return data
     })
