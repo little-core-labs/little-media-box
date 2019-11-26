@@ -51,4 +51,4 @@ class Video extends Track {
 }
 
 
-module.exports = { Track, Video }
+module.exports = { Audio, Subtitle, Video }
