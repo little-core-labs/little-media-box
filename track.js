@@ -69,6 +69,15 @@ class Video extends Track {
 
     return this.smpteTimecode = Timecode(t, fps, (num % den !== 0 && dropFrameSupport.includes(fps)))
   }
+
+  getImmersive() {
+    const immersiveProperties = {
+      projection: this.properties.projection ? this.properties.projection : 'none',
+      stereoscopy: this.properties.side_data_type ? this.properties.type : '2D'
+    }
+
+    return [immersiveProperties.projection !== 'none', immersiveProperties]
+  }
 }
 
 
