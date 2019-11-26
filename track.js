@@ -1,5 +1,6 @@
 const Source = require('./source')
 
+
 class Track {
   constructor(source, index = 0) {
     this.source = source
@@ -9,6 +10,33 @@ class Track {
     }
   }
 }
+
+
+class Audio extends Track {
+  constructor(source, index = 0) {
+    super(source, index)
+
+    this.valid = this.mediaType === 'audio'
+
+    if (!this.valid) {
+      throw new Error(`Media track at index ${index} not a valid video`)
+    }
+  }
+}
+
+
+class Subtitle extends Track {
+  constructor(source, index = 0) {
+    super(source, index)
+
+    this.valid = this.mediaType === 'subtitle'
+
+    if (!this.valid) {
+      throw new Error(`Media track at index ${index} not a valid video`)
+    }
+  }
+}
+
 
 class Video extends Track {
   constructor(source, index = 0) {
@@ -21,5 +49,6 @@ class Video extends Track {
     }
   }
 }
+
 
 module.exports = { Track, Video }
