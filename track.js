@@ -19,7 +19,7 @@ class Track {
 
 
 class Audio extends Track {
-  constructor(source, index = 0) {
+  constructor(source, index = 1) {
     super(source, index)
 
     this.valid = this.mediaType === 'audio'
@@ -32,7 +32,7 @@ class Audio extends Track {
 
 
 class Subtitle extends Track {
-  constructor(source, index = 0) {
+  constructor(source, index = 2) {
     super(source, index)
 
     this.valid = this.mediaType === 'subtitle'
