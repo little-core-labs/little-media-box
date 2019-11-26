@@ -53,6 +53,10 @@ class Video extends Track {
     if (!this.valid) {
       throw new Error(`Media track at index ${index} not a valid video`)
     }
+
+    if (this.primary) {
+      this.getSmpteTimecode()
+    }
   }
 
   getSmpteTimecode() {
