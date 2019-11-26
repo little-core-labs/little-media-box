@@ -11,6 +11,8 @@ class Presentation {
       this.sources = sources
     } else if (sources instanceof Source) {
       this.sources = [sources]
+    } else {
+      throw new Error('Invalid Sources provided')
     }
   }
 }
