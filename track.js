@@ -60,9 +60,7 @@ class Video extends Track {
     const t = new Date(1970, 0, 1)
     t.setSeconds(this.properties.duration)
 
-    const fps = Number((num/den).toFixed(2))
-
-    return this.smpteTimecode = Timecode(t, fps, (num % den !== 0))
+    return this.smpteTimecode = Timecode(t, Number((num/den).toFixed(2)), (num % den !== 0))
   }
 }
 
