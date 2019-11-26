@@ -1,4 +1,5 @@
 const Source = require('./source')
+const Timecode = require('smpte-timecode')
 
 
 class Track {
@@ -7,6 +8,8 @@ class Track {
     if (this.source instanceof Source) {
       this.properties = this.source.properties.streams[index]
       this.mediaType = this.properties.codec_type || ''
+    } else {
+      throw new Error('Invalid source provided to new Track constructor')
     }
 
     // Non-primary Video tracks are most likely an embedded coverart or image
@@ -50,6 +53,16 @@ class Video extends Track {
     if (!this.valid) {
       throw new Error(`Media track at index ${index} not a valid video`)
     }
+  }
+
+  getSmpteTimecode() {
+    const [num, den] = this.properties.r_frame_rate.split('/')
+    const t = new Date(1970, 0, 1)
+    t.setSeconds(this.properties.duration)
+
+    const fps = Number((num/den).toFixed(2))
+
+    return this.smpteTimecode = Timecode(t, fps, (num % den !== 0))
   }
 }
 
