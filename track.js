@@ -8,6 +8,9 @@ class Track {
       this.properties = this.source.properties.streams[index]
       this.mediaType = this.properties.codec_type || ''
     }
+
+    // Non-primary Video tracks are most likely an embedded coverart or image
+    this.primary = this.properties.disposition['default'] === 1
   }
 }
 
