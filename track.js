@@ -60,11 +60,14 @@ class Video extends Track {
   }
 
   getSmpteTimecode() {
+    const dropFrameSupport = [29.97, 59.94]
     const [num, den] = this.properties.r_frame_rate.split('/')
     const t = new Date(1970, 0, 1)
     t.setSeconds(this.properties.duration)
 
-    return this.smpteTimecode = Timecode(t, Number((num/den).toFixed(2)), (num % den !== 0))
+    const fps = Number((num/den).toFixed(3))
+
+    return this.smpteTimecode = Timecode(t, fps, (num % den !== 0 && dropFrameSupport.includes(fps)))
   }
 }
 
