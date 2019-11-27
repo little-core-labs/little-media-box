@@ -61,25 +61,25 @@ A read-only accessor for the container-level metadata in the file accessed from
 ### `const track = new Track(source, index = 0)`
 
 Creates and returns a new `Track` object, which represents the individual media
-bytestream obtained from the provided `source.uri` at the given index number.
+bytestream obtained from the provided `source.uri` at the given `index` number.
 
 #### `const audioTrack = new Track.Audio(source, index=1)`
 
 Creates and returns a new `Audio` object, which extends `Track`. Throws an
 error if the individual media bytestream obtained from the provided `source.uri`
-at the given index number is not a valid audio bytestream.
+at the given `index` number is not a valid audio bytestream.
 
 #### `const subtitleTrack = new Track.Subtitle(source, index=2)`
 
 Creates and returns a new `Subtitle` object, which extends `Track`. Throws an
 error if the individual media bytestream obtained from the provided `source.uri`
-at the given index number is not a valid subtitle bytestream.
+at the given `index` number is not a valid subtitle bytestream.
 
 #### `const videoTrack = new Track.Video(source, index=0)`
 
 Creates and returns a new `Video` object, which extends `Track`. Throws an
 error if the individual media bytestream obtained from the provided `source.uri`
-at the given index number is not a valid video bytestream.
+at the given `index` number is not a valid video bytestream.
 
 ## License
 
