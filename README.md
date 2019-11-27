@@ -1,7 +1,8 @@
 little-media-package
 ==========
 
-> A collection of media resources
+> Convenient atomicized classes for representing digital multimedia assets
+> in distributed Node.js DSP pipelines.
 
 ## Installation
 
@@ -15,15 +16,36 @@ $ npm install little-media-package
 
 ## Usage
 
-> TODO
+> WIP
+
+```js
+const Media = require('./index.js')
+const Source = require('./source.js')
+const Track = require('./track.js')
+
+const s = new Source('http://distribution.bbb3d.renderfarming.net/video/mp4/bbb_sunflower_1080p_60fps_normal.mp4')
+
+const audioTrack = new Track.Audio(s, 1)
+const otherTrack = new Track(s, 2)
+const videoTrack = new Track.Video(s, 0)
+
+const package = new Media.Package([audioTrack, otherTrack, videoTrack])
+```
 
 ## API
 
 > WIP
 
+### `const delivery = new MediaPackage(sources[, options])`
+
+Creates and returns a new `Delivery` object, comprised of the provided
+`sources`, and modified with the optionally-specified `options`. This object
+should contain every media asset necessary to designate the content delivery
+complete.
+
 ### `const package = new MediaPackage(tracks[, options])`
 
-Creates and returns a new `MediaPackage` object, comprised of the provided
+Creates and returns a new `Package` object, comprised of the provided
 `tracks`, and modified with the optionally-specified `options`. This object
 should contain every media track necessary to ingest, distribute, and view
 one complete piece of media content.
