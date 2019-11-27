@@ -21,6 +21,13 @@ $ npm install little-media-package
 
 > WIP
 
+### `const package = new MediaPackage(tracks[, options])`
+
+Creates and returns a new `MediaPackage` object, comprised of the provided
+`tracks`, and modified with the optionally-specified `options`. This object
+should contain every media track necessary to ingest, distribute, and view
+one complete piece of media content.
+
 ### `const source = new Source(uri[, options])`
 
 Creates and returns a new `Source` object from `uri`.
