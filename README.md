@@ -36,14 +36,14 @@ const package = new Media.Package([audioTrack, otherTrack, videoTrack])
 
 > WIP
 
-### `const delivery = new MediaPackage(sources[, options])`
+### `const delivery = new Media.Delivery(sources[, options])`
 
 Creates and returns a new `Delivery` object, comprised of the provided
 `sources`, and modified with the optionally-specified `options`. This object
 should contain every media asset necessary to designate the content delivery
 complete.
 
-### `const package = new MediaPackage(tracks[, options])`
+### `const package = new Media.Package(tracks[, options])`
 
 Creates and returns a new `Package` object, comprised of the provided
 `tracks`, and modified with the optionally-specified `options`. This object
