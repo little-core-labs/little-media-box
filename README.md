@@ -16,21 +16,7 @@ $ npm install little-media-package
 
 ## Usage
 
-> WIP
-
-```js
-const Media = require('./index.js')
-const Source = require('./source.js')
-const Track = require('./track.js')
-
-const s = new Source('http://distribution.bbb3d.renderfarming.net/video/mp4/bbb_sunflower_1080p_60fps_normal.mp4')
-
-const audioTrack = new Track.Audio(s, 1)
-const otherTrack = new Track(s, 2)
-const videoTrack = new Track.Video(s, 0)
-
-const package = new Media.Package([audioTrack, otherTrack, videoTrack])
-```
+> TODO
 
 ## API
 
