@@ -30,7 +30,10 @@ one complete piece of media content.
 
 ### `const source = new Source(uri[, options])`
 
-Creates and returns a new `Source` object from `uri`.
+Creates and returns a new `Source` object from `uri`. `uri` may be one local
+file path, or an accessible HTTP/HTTPS location, in which case the file at that
+location will be pulled down and read into a `ReadableStream` for consumption
+by `ffprobe`.
 
 #### `source.properties`
 
