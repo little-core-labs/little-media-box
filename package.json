@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "fluent-ffmpeg": "^2.1.2",
+    "get-uri": "^2.0.4",
     "smpte-timecode": "^1.2.3"
   }
 }
