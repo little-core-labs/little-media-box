@@ -12,6 +12,10 @@ class Track {
       throw new Error('Invalid source provided to new Track constructor')
     }
 
+    if (this.properties.duration === 'N/A' && this.source.properties.format.format_name === 'matroska,webm') {
+      this.properties.duration = this.source.properties.format.duration
+    }
+
     // Non-primary Video tracks are most likely an embedded coverart or image
     this.primary = this.properties.disposition['default'] === 1
   }
@@ -62,6 +66,7 @@ class Video extends Track {
   getSmpteTimecode() {
     const dropFrameSupport = [29.97, 59.94]
     const [num, den] = this.properties.r_frame_rate.split('/')
+
     const t = new Date(1970, 0, 1)
     t.setSeconds(this.properties.duration)
 
