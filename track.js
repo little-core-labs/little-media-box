@@ -59,11 +59,11 @@ class Video extends Track {
     }
 
     if (this.primary) {
-      this.getSmpteTimecode()
+      this.parseSmpte()
     }
   }
 
-  getSmpteTimecode() {
+  parseSmpte() {
     const dropFrameSupport = [29.97, 59.94]
     const [num, den] = this.properties.r_frame_rate.split('/')
 
@@ -75,13 +75,19 @@ class Video extends Track {
     return this.smpteTimecode = Timecode(t, fps, (num % den !== 0 && dropFrameSupport.includes(fps)))
   }
 
+  getSmpteTimecode() {
+    const hh = this.smpteTimecode.hours === 0 ? '00' : this.smpteTimecode.hours
+    const mm = this.smpteTimecode.minutes === 0 ? '00' : this.smpteTimecode.minutes
+    const ss = this.smpteTimecode.seconds === 0 ? '00' : this.smpteTimecode.seconds
+
+    return `${hh}:${mm}:${ss}${this.smpteTimecode.dropFrame ? `;${this.smpteTimecode.frames}` : ''}`
+  }
+
   getImmersive() {
-    const immersiveProperties = {
+    return {
       projection: this.properties.projection ? this.properties.projection : 'none',
       stereoscopy: this.properties.side_data_type ? this.properties.type : '2D'
     }
-
-    return [immersiveProperties.projection !== 'none', immersiveProperties]
   }
 }
 
