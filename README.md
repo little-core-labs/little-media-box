@@ -1,4 +1,4 @@
-little-media-package
+little-media-box
 ==========
 
 > Convenient atomicized classes for representing digital multimedia assets
