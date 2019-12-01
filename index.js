@@ -19,7 +19,9 @@ class Package {
     if (tracks instanceof Track.Track) {
       this.tracks = [tracks]
     } else if (Array.isArray(tracks) && tracks.every(t => t instanceof Track.Track)) {
-      this.tracks = tracks
+      this.tracks = tracks.sort((track1, track2) => {
+        return track1.properties.index - track2.properties.index
+      })
     } else {
       throw new Error('Invalid tracks provided')
     }
