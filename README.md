@@ -16,7 +16,56 @@ $ npm install little-media-package
 
 ## Usage
 
-> TODO
+```js
+const Media = require('little-media-box')
+
+async function main() {
+  const src = await new Media.Source('http://distribution.bbb3d.renderfarming.net/video/mp4/bbb_sunflower_1080p_60fps_normal.mp4')
+  // const src = await new Media.Source('test.mp4')
+
+  /* Derive tracks from the source */
+  const videoTrack = new Media.Track.Video(src) // video @ track 1/3
+  const mainAudioTrack = new Media.Track.Audio(src) // stereo audio @ track 2/3
+  const secAudioTrack = new Media.Track.Audio(src, 2) // 5.1 audio @ track 3/3
+
+  /* Create a MediaPackage */
+  const pack = new Media.Package([videoTrack, mainAudioTrack, secAudioTrack])
+  console.log(pack)
+}
+
+main()
+```
+
+Produces the following output:
+
+```sh
+Package {
+  tracks: [
+    Video {
+      source: [Source],
+      properties: [Object],
+      mediaType: 'video',
+      primary: true,
+      valid: true,
+      smpteTimecode: [Timecode]
+    },
+    Audio {
+      source: [Source],
+      properties: [Object],
+      mediaType: 'audio',
+      primary: true,
+      valid: true
+    },
+    Audio {
+      source: [Source],
+      properties: [Object],
+      mediaType: 'audio',
+      primary: true,
+      valid: true
+    }],
+  opts: {}
+}
+```
 
 ## API
 
