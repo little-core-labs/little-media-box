@@ -10,7 +10,7 @@ async function main() {
   const secAudioTrack = new Media.Track.Audio(src, 2) // fallback audio at track 3
 
   /* Create a MediaPackage */
-  const pack = new Media.Package([videoTrack, mainAudioTrack, secAudioTrack])
+  const pack = new Media.Package([mainAudioTrack, secAudioTrack, videoTrack])
   console.log(pack)
   // console.log(JSON.stringify(pack, null, 2))
   return pack
