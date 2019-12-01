@@ -1,5 +1,5 @@
 const Source = require('./source')
-const T = require('./track')
+const Track = require('./track')
 
 class Delivery {
   constructor(sources, opts = {}) {
@@ -16,9 +16,9 @@ class Delivery {
 
 class Package {
   constructor(tracks, opts = {}) {
-    if (tracks instanceof T.Track) {
+    if (tracks instanceof Track.Track) {
       this.tracks = [tracks]
-    } else if (Array.isArray(tracks) && tracks.every(t => t instanceof T.Track)) {
+    } else if (Array.isArray(tracks) && tracks.every(t => t instanceof Track.Track)) {
       this.tracks = tracks
     } else {
       throw new Error('Invalid tracks provided')
@@ -27,4 +27,4 @@ class Package {
   }
 }
 
-module.exports = { Delivery, Package }
+module.exports = { Delivery, Package, Source, Track }
