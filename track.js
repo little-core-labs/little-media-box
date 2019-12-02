@@ -22,7 +22,7 @@ class Track {
 }
 
 
-class Audio extends Track {
+class AudioTrack extends Track {
   constructor(source, index = 1) {
     super(source, index)
 
@@ -35,7 +35,7 @@ class Audio extends Track {
 }
 
 
-class Subtitle extends Track {
+class SubtitleTrack extends Track {
   constructor(source, index = 2) {
     super(source, index)
 
@@ -48,7 +48,7 @@ class Subtitle extends Track {
 }
 
 
-class Video extends Track {
+class VideoTrack extends Track {
   constructor(source, index = 0) {
     super(source, index)
 
@@ -92,4 +92,4 @@ class Video extends Track {
 }
 
 
-module.exports = { Audio, Subtitle, Track, Video }
+module.exports = { AudioTrack, SubtitleTrack, Track, VideoTrack }
