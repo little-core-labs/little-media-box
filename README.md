@@ -6,9 +6,7 @@ little-media-box
 
 ## Installation
 
-```sh
-$ npm install little-media-package
-```
+> WIP
 
 ## Status
 
