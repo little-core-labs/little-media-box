@@ -31,6 +31,18 @@ class Package {
     }
     this.opts = opts
   }
+  async mux() {
+    try {
+      const tracks = this.tracks //copy
+      const cmdOpts = ['-o', 'output.mkv', tracks.shift().source.uri]
+      cmdOpts.push(
+        ...tracks.filter(t => t.source.uri !== cmdOpts[2]).map(m => `+${m}`)
+      )
+      console.log(cmdOpts)
+    } catch (e) {
+      console.error(e)
+    }
+  }
 }
 
 module.exports = { AudioTrack, Delivery, Package, Source, SubtitleTrack, Track, VideoTrack }
