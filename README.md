@@ -71,21 +71,21 @@ Package {
 
 > WIP
 
-### `const delivery = new Media.Delivery(sources[, options])`
+### `const delivery = new Delivery(sources[, options])`
 
 Creates and returns a new `Delivery` object, comprised of the provided
 `sources`, and modified with the optionally-specified `options`. This object
 should contain every media asset necessary to designate the content delivery
 complete.
 
-### `const package = new Media.Package(tracks[, options])`
+### `const package = new Package(tracks[, options])`
 
 Creates and returns a new `Package` object, comprised of the provided
 `tracks`, and modified with the optionally-specified `options`. This object
 should contain every media track necessary to ingest, distribute, and view
 one complete piece of media content.
 
-### `const source = new Media.Source(uri[, options])`
+### `const source = new Source(uri[, options])`
 
 Creates and returns a new `Source` object from `uri`. `uri` may be one local
 file path, or an accessible HTTP/HTTPS location, in which case the file at that
@@ -107,26 +107,26 @@ file accessed from `source.uri`.
 A read-only accessor for the container-level metadata in the file accessed from
 `source.uri`.
 
-### `const track = new Media.Track(source, index = 0)`
+### `const track = new Track(source, index = 0)`
 
 Creates and returns a new `Track` object, which represents the individual media
 bytestream obtained from the provided `source.uri` at the given `index` number.
 
-#### `const audioTrack = new Media.Track.Audio(source, index=1)`
+#### `const audioTrack = new AudioTrack(source, index=1)`
 
-Creates and returns a new `Audio` object, which extends `Track`. Throws an
+Creates and returns a new `AudioTrack` object, which extends `Track`. Throws an
 error if the individual media bytestream obtained from the provided `source.uri`
 at the given `index` number is not a valid audio bytestream.
 
-#### `const subtitleTrack = new Media.Track.Subtitle(source, index=2)`
+#### `const subtitleTrack = new SubtitleTrack(source, index=2)`
 
-Creates and returns a new `Subtitle` object, which extends `Track`. Throws an
+Creates and returns a new `SubtitleTrack` object, which extends `Track`. Throws an
 error if the individual media bytestream obtained from the provided `source.uri`
 at the given `index` number is not a valid subtitle bytestream.
 
-#### `const videoTrack = new Media.Track.Video(source, index=0)`
+#### `const videoTrack = new VideoTrack(source, index=0)`
 
-Creates and returns a new `Video` object, which extends `Track`. Throws an
+Creates and returns a new `VideoTrack` object, which extends `Track`. Throws an
 error if the individual media bytestream obtained from the provided `source.uri`
 at the given `index` number is not a valid video bytestream.
 
