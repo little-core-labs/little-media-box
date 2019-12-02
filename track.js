@@ -52,7 +52,12 @@ class VideoTrack extends Track {
   constructor(source, index = 0) {
     super(source, index)
 
-    this.valid = this.mediaType === 'video'
+    this.valid = (
+      this.mediaType === 'video' &&
+      this.properties.nb_frames >= 1 &&
+      this.properties.r_frame_rate !== 'N/A' &&
+      this.properties.bit_rate >= 1
+    )
 
     if (!this.valid) {
       throw new Error(`Media track at index ${index} not a valid video`)
