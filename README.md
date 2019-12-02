@@ -22,9 +22,9 @@ async function main() {
   // const src = await new Media.Source('test.mp4')
 
   /* Derive tracks from the source */
-  const videoTrack = new Media.Track.Video(src) // video @ track 1/3
-  const mainAudioTrack = new Media.Track.Audio(src) // stereo audio @ track 2/3
-  const secAudioTrack = new Media.Track.Audio(src, 2) // 5.1 audio @ track 3/3
+  const videoTrack = new Media.VideoTrack(src) // video @ track 1/3
+  const mainAudioTrack = new Media.AudioTrack(src) // stereo audio @ track 2/3
+  const secAudioTrack = new Media.AudioTrack(src, 2) // 5.1 audio @ track 3/3
 
   /* Create a MediaPackage */
   const pack = new Media.Package([videoTrack, mainAudioTrack, secAudioTrack])
@@ -39,7 +39,7 @@ Produces the following output:
 ```sh
 Package {
   tracks: [
-    Video {
+    VideoTrack {
       source: [Source],
       properties: [Object],
       mediaType: 'video',
@@ -47,14 +47,14 @@ Package {
       valid: true,
       smpteTimecode: [Timecode]
     },
-    Audio {
+    AudioTrack {
       source: [Source],
       properties: [Object],
       mediaType: 'audio',
       primary: true,
       valid: true
     },
-    Audio {
+    AudioTrack {
       source: [Source],
       properties: [Object],
       mediaType: 'audio',
