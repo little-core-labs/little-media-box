@@ -1,6 +1,10 @@
 const Source = require('./source')
 const Track = require('./track')
 
+const AudioTrack = Track.AudioTrack
+const SubtitleTrack = Track.SubtitleTrack
+const VideoTrack = Track.VideoTrack
+
 class Delivery {
   constructor(sources, opts = {}) {
     if (sources instanceof Source) {
@@ -29,4 +33,4 @@ class Package {
   }
 }
 
-module.exports = { Delivery, Package, Source, Track }
+module.exports = { AudioTrack, Delivery, Package, Source, SubtitleTrack, Track, VideoTrack }
