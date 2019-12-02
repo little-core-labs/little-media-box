@@ -5,6 +5,8 @@ const AudioTrack = Track.AudioTrack
 const SubtitleTrack = Track.SubtitleTrack
 const VideoTrack = Track.VideoTrack
 
+const nanoprocess = require('nanoprocess')
+
 class Delivery {
   constructor(sources, opts = {}) {
     if (sources instanceof Source) {
@@ -34,11 +36,18 @@ class Package {
   async mux() {
     try {
       const tracks = this.tracks //copy
-      const cmdOpts = ['-o', 'output.mkv', tracks.shift().source.uri]
+      const cmdOpts = ['-o', 'mux_output.mkv', tracks.shift().source.uri]
       cmdOpts.push(
         ...tracks.filter(t => t.source.uri !== cmdOpts[2]).map(m => `+${m}`)
       )
       console.log(cmdOpts)
+      const muxCmd = nanoprocess('mkvmerge', cmdOpts)
+
+      muxCmd.open((err) => {
+        muxCmd.process.on('close', (exitErr) => {
+          console.log(exitErr, 'closed mux command')
+        })
+      })
     } catch (e) {
       console.error(e)
     }
