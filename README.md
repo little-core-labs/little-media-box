@@ -102,7 +102,7 @@ by `ffprobe`.
 #### `await source.demux()`
 
 Demuxes each item in `source.properties.streams` to its own individual Matroska
-container. Default output URI format:
+container. Returns an array of output URIs. Default output URI format:
 
 ```js
 `${stream.index}_${stream.codec_type}.mkv`
