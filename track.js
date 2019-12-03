@@ -12,11 +12,18 @@ class Track {
       throw new Error('Invalid source provided to new Track constructor')
     }
 
-    if (
-      this.properties.duration === 'N/A' &&
-      this.source.properties.format.format_name === 'matroska,webm'
-    ) {
+    // Matroska doesn't do track-level duration, only container-level
+    // So, let's take the container duration and apply it to the track.
+    // Close enough, right?!
+    if (this.properties.duration === 'N/A' &&
+      this.source.properties.format.format_name === 'matroska,webm') {
       this.properties.duration = this.source.properties.format.duration
+    }
+
+    if (this.properties.tags) {
+      this.language = this.properties.tags.language || 'und'
+    } else {
+      this.language = 'und'
     }
 
     // Non-primary Video tracks are most likely an embedded coverart or image
