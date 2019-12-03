@@ -135,6 +135,12 @@ specifying the index number for `track.source.demuxes[]`. This allows the user
 to pass a full `Track` object to other `little-media-box` transcoding and
 processing methods.
 
+#### `track.language`
+
+Read-only string accessor for the `Track`'s `language` tag, set at instantiation.
+If none is available, this value gets set to `und`, which is the best-practices
+identifier string for universal and/or unknown language intent.
+
 #### `const audioTrack = new AudioTrack(source, index=1)`
 
 Creates and returns a new `AudioTrack` object, which extends `Track`. Throws an
