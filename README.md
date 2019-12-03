@@ -128,6 +128,13 @@ A read-only accessor for the container-level metadata in the file accessed from
 Creates and returns a new `Track` object, which represents the individual media
 bytestream obtained from the provided `source.uri` at the given `index` number.
 
+#### `track.assignDemux(streamIndex = 0)`
+
+Assign to the given `Track` a file output from its `source.demux()` method, by
+specifying the index number for `track.source.demuxes[]`. This allows the user
+to pass a full `Track` object to other `little-media-box` transcoding and
+processing methods.
+
 #### `const audioTrack = new AudioTrack(source, index=1)`
 
 Creates and returns a new `AudioTrack` object, which extends `Track`. Throws an
