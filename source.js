@@ -47,7 +47,7 @@ class Source {
           '-c', 'copy',
           '-f', 'matroska'
         ])
-        demuxes.push(`${stream.index}_${stream.codec_type}.mkv`)
+        demuxes.push(path.resolve(`${stream.index}_${stream.codec_type}.mkv`))
       })
 
       demuxCmd.on('start', cmd => console.log('running FFmpeg command', cmd))

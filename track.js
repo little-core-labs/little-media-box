@@ -3,7 +3,7 @@ const Timecode = require('smpte-timecode')
 
 
 class Track {
-  constructor(source, index = 0) {
+  constructor(source, index = 0, options = {}) {
     this.source = source
     if (this.source instanceof Source) {
       this.properties = this.source.properties.streams[index]
@@ -12,12 +12,29 @@ class Track {
       throw new Error('Invalid source provided to new Track constructor')
     }
 
-    if (this.properties.duration === 'N/A' && this.source.properties.format.format_name === 'matroska,webm') {
+    if (
+      this.properties.duration === 'N/A' &&
+      this.source.properties.format.format_name === 'matroska,webm'
+    ) {
       this.properties.duration = this.source.properties.format.duration
     }
 
     // Non-primary Video tracks are most likely an embedded coverart or image
     this.primary = this.properties.disposition['default'] === 1
+
+    if (options.demux) {
+      return this.assignDemux({ streamIndex: options.demux })
+    }
+
+  }
+
+  assignDemux(streamIndex = 0) {
+    try {
+      this.demux = this.source.demuxes[streamIndex]
+      return this.demux
+    } catch (e) {
+      throw new Error(`Error assigning demux at array index ${opts.streamIndex}`, e)
+    }
   }
 }
 
