@@ -19,9 +19,9 @@ class Delivery {
 
 class Package {
   constructor(tracks, opts = {}) {
-    if (tracks instanceof Track.Track) {
+    if (tracks instanceof Track) {
       this.tracks = [tracks]
-    } else if (Array.isArray(tracks) && tracks.every(t => t instanceof Track.Track)) {
+    } else if (Array.isArray(tracks) && tracks.every(t => t instanceof Track)) {
       this.tracks = tracks.sort((track1, track2) => {
         return track1.properties.index - track2.properties.index
       })
@@ -34,7 +34,7 @@ class Package {
     this.demuxes = []
   }
   mux(options = {}) {
-    try {
+    return new Promise((resolve, reject) => {
       const opts = options //copy
       const outputUrl = opts.outputUrl || 'mux_output.mkv'
 
@@ -46,16 +46,18 @@ class Package {
       const muxCmd = nanoprocess('mkvmerge', cmdOpts)
 
       muxCmd.open((err) => {
+        if (err) { reject(err) }
         muxCmd.process.on('close', (exitCode) => {
           console.log('closed mux command with code', exitCode)
           if (exitCode == 0) {
             this.muxes.push(outputUrl)
+            resolve(outputUrl)
+          } else {
+            reject('mkvmerge failed with exit code', exitCode)
           }
         })
       })
-    } catch (e) {
-      console.error(e)
-    }
+    })
   }
 }
 
