@@ -99,6 +99,15 @@ file path, or an accessible HTTP/HTTPS location, in which case the file at that
 location will be pulled down and read into a `ReadableStream` for consumption
 by `ffprobe`.
 
+#### `await source.demux()`
+
+Demuxes each item in `source.properties.streams` to its own individual Matroska
+container. Default output URI format:
+
+```js
+`${stream.index}_${stream.codec_type}.mkv`
+```
+
 #### `source.properties`
 
 A read-only accessor for the media properties and metadata obtained from
