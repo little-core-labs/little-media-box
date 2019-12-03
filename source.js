@@ -32,6 +32,29 @@ class Source {
       })
     })
   }
+
+  async demux(opts = {}) {
+    return new Promise((resolve, reject) => {
+      const demuxCmd = ffmpeg(this.uri)
+
+      this.properties.streams.forEach(stream => {
+        demuxCmd.output(`${stream.index}_${stream.codec_type}.mkv`)
+        demuxCmd.outputOptions([
+          `-map 0:${stream.index}`,
+          '-c', 'copy',
+          '-f', 'matroska'
+        ])
+      })
+
+      demuxCmd.on('start', cmd => console.log('running FFmpeg command', cmd))
+      demuxCmd.on('error', err => reject(err))
+      demuxCmd.on('end', (err, stdout, stderr) => {
+        console.log(err, stdout, stderr)
+        resolve(true)
+      })
+      demuxCmd.run()
+    })
+  }
 }
 
 
