@@ -1,9 +1,5 @@
 const Source = require('./source')
-const Track = require('./track')
-
-const AudioTrack = Track.AudioTrack
-const SubtitleTrack = Track.SubtitleTrack
-const VideoTrack = Track.VideoTrack
+const { AudioTrack, SubtitleTrack, VideoTrack, Track } = require('./track')
 
 const nanoprocess = require('nanoprocess')
 const path = require('path')
@@ -45,7 +41,7 @@ class Package {
       const tracks = this.tracks //copy
       const cmdOpts = ['-o', outputUrl, tracks.shift().source.uri]
       cmdOpts.push(
-        ...tracks.filter(t => t.source.uri !== cmdOpts[2]).map(m => `+${m}`)
+        ...tracks.filter(t => t.source.uri !== cmdOpts[2]).map(m => `+${m.source.uri}`)
       )
       const muxCmd = nanoprocess('mkvmerge', cmdOpts)
 
