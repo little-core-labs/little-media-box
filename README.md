@@ -83,6 +83,15 @@ Creates and returns a new `Package` object, comprised of the provided
 should contain every media track necessary to ingest, distribute, and view
 one complete piece of media content.
 
+#### `await package.mux(opts = {})`
+
+Muxes each `Track` contained within the `Package`, producing a single Matroska
+file.
+
+##### `opts.outputUrl`
+
+The path of the output file.
+
 ### `const source = new Source(uri[, options])`
 
 Creates and returns a new `Source` object from `uri`. `uri` may be one local
@@ -127,6 +136,43 @@ at the given `index` number is not a valid subtitle bytestream.
 Creates and returns a new `VideoTrack` object, which extends `Track`. Throws an
 error if the individual media bytestream obtained from the provided `source.uri`
 at the given `index` number is not a valid video bytestream.
+
+##### `videoTrack.parseSmpte()`
+
+Generates and returns a SMPTE Timecode object from the track's media properties.
+Also stores the object at `videoTrack.smpteTimecode`. Film, PAL, NTSC and ATSC
+are supported, in both regular and drop-frame formats. When a frame rate which
+doesn't conform with SMPTE is present, an attempt will be made to create a 
+best-guess SMPTE timecode, and `{ valid: false }` will be set within the
+`smpteTimecode` object.
+
+##### `videoTrack.getSmpteTimecode()`
+
+Generates and returns a string of the track's
+[SMPTE Timecode](https://en.wikipedia.org/wiki/SMPTE_timecode).
+
+##### `videoTrack.getImmersive()`
+
+A convenience function, which returns an object containing relevant information
+about the track's immersive media qualities.
+
+```js
+videoTrack.getImmersive()
+// Returns: { projection: 'equirectangular', stereoscopy: 'over-under' }
+```
+
+##### `videoTrack.primary`
+
+Indicates whether the `videoTrack` is the *primary* video track of its given `Source`.
+
+*Primary* `videoTrack`s are hoisted to the top of `Package.tracks[]` when added
+to a new `Package`.
+
+##### `videoTrack.valid`
+
+A boolean indicating whether the `videoTrack` contains a valid video bytestream.
+
+When `false`, a new `Error` is thrown by the `videoTrack` constructor.
 
 ## License
 
