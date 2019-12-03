@@ -28,6 +28,7 @@ class Source {
       ffmpeg(this.uri).ffprobe((err, data) => {
         if (err) { reject(err) }
         this.properties = data
+        this.demuxes = []
         resolve(this)
       })
     })
@@ -35,6 +36,8 @@ class Source {
 
   async demux(opts = {}) {
     return new Promise((resolve, reject) => {
+      const demuxes = []
+
       const demuxCmd = ffmpeg(this.uri)
 
       this.properties.streams.forEach(stream => {
@@ -44,13 +47,14 @@ class Source {
           '-c', 'copy',
           '-f', 'matroska'
         ])
+        demuxes.push(`${stream.index}_${stream.codec_type}.mkv`)
       })
 
       demuxCmd.on('start', cmd => console.log('running FFmpeg command', cmd))
       demuxCmd.on('error', err => reject(err))
       demuxCmd.on('end', (err, stdout, stderr) => {
-        console.log(err, stdout, stderr)
-        resolve(true)
+        this.demuxes.push(...demuxes)
+        resolve(demuxes)
       })
       demuxCmd.run()
     })
