@@ -84,8 +84,9 @@ class VideoTrack extends Track {
     const hh = this.smpteTimecode.hours === 0 ? '00' : this.smpteTimecode.hours
     const mm = this.smpteTimecode.minutes === 0 ? '00' : this.smpteTimecode.minutes
     const ss = this.smpteTimecode.seconds === 0 ? '00' : this.smpteTimecode.seconds
+    const frames = this.smpteTimecode.frames === 0 ? '00' : this.smpteTimecode.frames
 
-    return `${hh}:${mm}:${ss}${this.smpteTimecode.dropFrame ? `;${this.smpteTimecode.frames}` : ''}`
+    return `${hh}:${mm}:${ss}${this.smpteTimecode.dropFrame ? ';' : ':'}${frames}`
   }
 
   getImmersive() {
