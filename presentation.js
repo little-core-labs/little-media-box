@@ -1,4 +1,4 @@
-const Source = require('./source')
+const Target = require('./target')
 
 /**
  * A Presentation is the entire collection of assets required to display a
@@ -6,13 +6,13 @@ const Source = require('./source')
  */
 
 class Presentation {
-  constructor(sources, opts, metadata = {}) {
-    if (Array.isArray(sources) && sources.every(s => s instanceof Source)) {
-      this.sources = sources
-    } else if (sources instanceof Source) {
-      this.sources = [sources]
+  constructor(targets, opts, metadata = {}) {
+    if (Array.isArray(targets) && targets.every(t => t instanceof Target)) {
+      this.targets = targets
+    } else if (targets instanceof Target) {
+      this.targets = [targets]
     } else {
-      throw new Error('Invalid Sources provided')
+      throw new Error('Invalid Targets provided')
     }
   }
 }
