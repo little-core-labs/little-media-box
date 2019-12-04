@@ -4,6 +4,7 @@ const path = require('path')
 
 class Source {
   constructor(uri) {
+    this.demuxes = []
     if (uri.startsWith('http')) {
       this.uri = uri
       return new Promise((resolve, reject) => {
@@ -28,7 +29,6 @@ class Source {
       ffmpeg(this.uri).ffprobe((err, data) => {
         if (err) { reject(err) }
         this.properties = data
-        this.demuxes = []
         resolve(this)
       })
     })
