@@ -4,10 +4,17 @@ async function main() {
   const src = await new Media.Source('http://distribution.bbb3d.renderfarming.net/video/mp4/bbb_sunflower_1080p_60fps_normal.mp4')
   // const src = await new Media.Source('test.mp4')
 
+  const demuxedSources = await src.demux()
+  console.log('Demuxed the source: ', demuxedSources)
+
   /* Derive tracks from the source */
   const videoTrack = new Media.VideoTrack(src)
   const mainAudioTrack = new Media.AudioTrack(src)
   const secAudioTrack = new Media.AudioTrack(src, 2) // fallback audio at track 3
+
+  videoTrack.assignDemux(0)
+  mainAudioTrack.assignDemux(1)
+  secAudioTrack.assignDemux(2)
 
   /* Create a MediaPackage */
   const pack = new Media.Package([mainAudioTrack, secAudioTrack, videoTrack])
