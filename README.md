@@ -15,54 +15,29 @@ little-media-box
 ## Usage
 
 ```js
-const Media = require('little-media-box')
+const Media = require('./index')
 
-async function main() {
-  const src = await new Media.Source('http://distribution.bbb3d.renderfarming.net/video/mp4/bbb_sunflower_1080p_60fps_normal.mp4')
-  // const src = await new Media.Source('test.mp4')
+async function main(uri) {
+  const src = await new Media.Source(uri)
+  await src.demux()
 
-  /* Derive tracks from the source */
   const videoTrack = new Media.VideoTrack(src) // video @ track 1/3
+  videoTrack.assignDemux(0)
+
   const mainAudioTrack = new Media.AudioTrack(src) // stereo audio @ track 2/3
+  mainAudioTrack.assignDemux(1)
+
   const secAudioTrack = new Media.AudioTrack(src, 2) // 5.1 audio @ track 3/3
+  secAudioTrack.assignDemux(2)
 
-  /* Create a MediaPackage */
-  const pack = new Media.Package([videoTrack, mainAudioTrack, secAudioTrack])
-  console.log(pack)
+  return [
+    videoTrack,
+    mainAudioTrack,
+    secAudioTrack
+  ]
 }
 
-main()
-```
-
-Produces the following output:
-
-```sh
-Package {
-  tracks: [
-    VideoTrack {
-      source: [Source],
-      properties: [Object],
-      mediaType: 'video',
-      primary: true,
-      valid: true,
-      smpteTimecode: [Timecode]
-    },
-    AudioTrack {
-      source: [Source],
-      properties: [Object],
-      mediaType: 'audio',
-      primary: true,
-      valid: true
-    },
-    AudioTrack {
-      source: [Source],
-      properties: [Object],
-      mediaType: 'audio',
-      primary: true,
-      valid: true
-    }],
-  opts: {}
-}
+main('http://distribution.bbb3d.renderfarming.net/video/mp4/bbb_sunflower_1080p_60fps_normal.mp4')
 ```
 
 ## API
