@@ -5,7 +5,7 @@ const { Package } = require('./index')
 class Target {
   constructor(options = {}) {
     if (options.package) {
-      if (!options.package instanceof Package) {
+      if (!(options.package instanceof Package)) {
         throw new Error('Package is not a valid MediaPackage')
       } else {
         this.package = options.package
