@@ -3,6 +3,7 @@ const { AudioTrack, SubtitleTrack, VideoTrack, Track } = require('./track')
 
 const nanoprocess = require('nanoprocess')
 const path = require('path')
+const uuidv4 = require('uuid/v4')
 
 class Delivery {
   constructor(sources, opts = {}) {
@@ -19,6 +20,7 @@ class Delivery {
 
 class Package {
   constructor(tracks, opts = {}) {
+    this.uuid = uuidv4()
     if (tracks instanceof Track) {
       this.tracks = [tracks]
     } else if (Array.isArray(tracks) && tracks.every(t => t instanceof Track)) {

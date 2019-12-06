@@ -1,9 +1,11 @@
 const ffmpeg = require('fluent-ffmpeg')
 const getUri = require('get-uri')
 const path = require('path')
+const uuidv4 = require('uuid/v4')
 
 class Source {
   constructor(uri) {
+    this.uuid = uuidv4()
     this.demuxes = []
     if (uri.startsWith('http')) {
       this.uri = uri

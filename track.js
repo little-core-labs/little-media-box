@@ -1,9 +1,11 @@
 const Source = require('./source')
 const Timecode = require('smpte-timecode')
+const uuidv4 = require('uuid/v4')
 
 
 class Track {
   constructor(source, index = 0, options = {}) {
+    this.uuid = uuidv4()
     this.source = source
     if (this.source instanceof Source) {
       this.properties = this.source.properties.streams[index]
