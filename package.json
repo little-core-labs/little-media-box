@@ -12,6 +12,7 @@
     "fluent-ffmpeg": "^2.1.2",
     "get-uri": "^2.0.4",
     "nanoprocess": "^0.8.0",
-    "smpte-timecode": "^1.2.3"
+    "smpte-timecode": "^1.2.3",
+    "uuid": "^3.3.3"
   }
 }
