@@ -1,0 +1,12 @@
+{
+  "limits": {
+    "codec": {},
+    "file": {}
+  },
+  "name": "ps4",
+  "targetOpts": {
+    "audio": {},
+    "container": {},
+    "video": {}
+  }
+}
