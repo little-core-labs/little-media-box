@@ -3,23 +3,23 @@ const fs = require('fs')
 const { Package } = require('./index')
 
 class Target {
-  constructor(opts = {}) {
-    if (opts.pack) {
-      if (!opts.pack instanceof Package) {
+  constructor(options = {}) {
+    if (options.package) {
+      if (!options.package instanceof Package) {
         throw new Error('Package is not a valid MediaPackage')
       } else {
-        this.package = opts.pack
+        this.package = options.package
       }
     }
-    if (!opts.target) {
-      throw new Error(`No target name specified. ${opts}`)
+    if (!options.target) {
+      throw new Error(`No target name specified. ${options}`)
     }
-    else if (opts.target && fs.existsSync(`./targets/${opts.target}.json`)) {
-      this.name = opts.target
+    else if (options.target && fs.existsSync(`./targets/${options.target}.json`)) {
+      this.name = options.target
     } else {
       throw new Error('Not a defined target')
     }
-    this.config = JSON.parse(fs.readFileSync(`./targets/${opts.target}.json`))
+    this.config = JSON.parse(fs.readFileSync(`./targets/${options.target}.json`))
   }
 }
 
