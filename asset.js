@@ -7,8 +7,8 @@ class Asset {
     this.associations = []
 
     const opts = options //copy
-    if (opts.path) {
-      this.path = path.resolve(opts.path)
+    if (opts.uri) {
+      this.uri = path.resolve(opts.uri)
     }
 
     if (opts.assetType) {
