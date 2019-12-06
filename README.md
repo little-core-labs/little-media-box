@@ -44,6 +44,20 @@ main('http://distribution.bbb3d.renderfarming.net/video/mp4/bbb_sunflower_1080p_
 
 > WIP
 
+### `const asset = new Asset(options)`
+
+Creates and returns a new `Asset` object, comprised of the properties supplied
+by `options`.
+
+#### `asset.options.association`
+
+An object or an array of objects are accepted. Associates this `Asset` with one
+or more existent `Delivery`, `Package`, `Source`, `Target`, or `Track` object.
+
+#### `asset.options.uri`
+
+A URI pointing to the `Asset`. May be a local file or a remote HTTP location.
+
 ### `const delivery = new Delivery(sources[, options])`
 
 Creates and returns a new `Delivery` object, comprised of the provided
