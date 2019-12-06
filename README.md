@@ -98,6 +98,22 @@ file accessed from `source.uri`.
 A read-only accessor for the container-level metadata in the file accessed from
 `source.uri`.
 
+### `const target = new Target(options)`
+
+Creates and returns a new `Target` object, which represents the desired media
+properties for a `Package` to be processed. Instantiates with the following
+accepted options:
+
+#### `target.options.pack`
+
+A `Package` to be used as the `Target` input.
+
+#### `target.options.target`
+
+The name of the `Target`, for which there is a valid and accessible JSON config
+within the `./targets` directory. Valid target declarations will result in the
+return of a new `Target` class with all its config pre-loaded into the object.
+
 ### `const track = new Track(source, index = 0)`
 
 Creates and returns a new `Track` object, which represents the individual media
