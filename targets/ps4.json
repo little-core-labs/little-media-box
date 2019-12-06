@@ -1,12 +1,53 @@
 {
   "limits": {
-    "codec": {},
-    "file": {}
+    "codec": {
+      "audio": {
+        "bit_rate": 320000,
+        "channels": 2
+      },
+      "video": {
+        "bit_rate": 20000000,
+        "pix_fmt": "yuv420p"
+      }
+    }
   },
   "name": "ps4",
+  "targetFormat": {
+    "type": "hls"
+  },
   "targetOpts": {
-    "audio": {},
-    "container": {},
-    "video": {}
+    "audio": {
+      "channels": 2,
+      "codec": [
+        "libfdk_aac",
+        "aac"
+      ],
+      "sampleRate": 48000
+    },
+    "container": {
+      "trackCount": {
+        "video": 1,
+        "audio": 1
+      }
+    },
+    "video": {
+      "codec": [
+        "h264_nvenc",
+        "libx264"
+      ],
+      "gop": {
+        "closed": true,
+        "keyint": 4,
+        "minKeyint": 2,
+        "rcLookahead": 2,
+        "sceneCut": true,
+        "strict": true
+      },
+      "vbvRate": {
+        "minrate": 0.5,
+        "maxrate": 1.5,
+        "bufsize": 3.0
+      }
+    }
   }
 }
