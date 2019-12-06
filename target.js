@@ -1,5 +1,16 @@
+const fs = require('fs')
+
+const { Package } = require('./index')
+
 class Target {
   constructor(opts = {}) {
+    if (opts.pack) {
+      if (!opts.pack instanceof Package) {
+        throw new Error('Package is not a valid MediaPackage')
+      } else {
+        this.package = opts.pack
+      }
+    }
     if (!opts.target) {
       throw new Error(`No target name specified. ${opts}`)
     }
@@ -8,8 +19,7 @@ class Target {
     } else {
       throw new Error('Not a defined target')
     }
-
-    return this
+    this.config = JSON.parse(fs.readFileSync(`./targets/${opts.target}.json`))
   }
 }
 
