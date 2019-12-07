@@ -77,6 +77,10 @@ one complete piece of media content.
 Muxes each `Track` contained within the `Package`, producing a single Matroska
 file.
 
+#### `package.assignTargets(targets)`
+
+Assigns a `Target` or an array of `Target`s to the `Package`.
+
 ##### `opts.outputUrl`
 
 The path of the output file.
@@ -118,7 +122,7 @@ Creates and returns a new `Target` object, which represents the desired media
 properties for a `Package` to be processed. Instantiates with the following
 accepted options:
 
-#### `target.options.pack`
+#### `target.options.package`
 
 A `Package` to be used as the `Target` input.
 
