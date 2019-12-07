@@ -1,4 +1,5 @@
 const Source = require('./source')
+const Target = require('./target')
 const { AudioTrack, SubtitleTrack, VideoTrack, Track } = require('./track')
 
 const nanoprocess = require('nanoprocess')
@@ -20,6 +21,8 @@ class Delivery {
 
 class Package {
   constructor(tracks, opts = {}) {
+    const opt = opts //copy
+    this.targets = []
     this.uuid = uuidv4()
     if (tracks instanceof Track) {
       this.tracks = [tracks]
@@ -30,7 +33,18 @@ class Package {
     } else {
       throw new Error('Invalid tracks provided')
     }
-    this.opts = opts
+
+    if (opt.targets) {
+      if (opt.targets instanceof Target) {
+        this.targets = [opt.targets]
+      } else if (Array.isArray(opt.targets) &&
+        opt.targets.every(t => t instanceof Target)
+      ) {
+        this.targets.push(opt.targets)
+      }
+    }
+
+    this.opts = opt
 
     this.muxes = []
     this.demuxes = []
@@ -60,6 +74,9 @@ class Package {
         })
       })
     })
+  }
+  assignTargets(targets) {
+    this.targets.push(targets)
   }
 }
 
