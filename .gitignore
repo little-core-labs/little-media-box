@@ -60,5 +60,3 @@ typings/
 # next.js build output
 .next
 
-# Matroska files output by the module
-*.mkv
