@@ -36,20 +36,32 @@ class Source {
     })
   }
 
-  async demux(opts = {}) {
+  async demux(streams = []) {
     return new Promise((resolve, reject) => {
       const demuxes = []
+      const inStreams = []
+
+      const streamsIterator = streams.entries()
+
+      for (let s of streams) {
+        inStreams.push(this.properties.streams[s])
+      }
+
+      if (inStreams.length === 0) {
+        inStreams.push(...this.properties.streams)
+      }
 
       const demuxCmd = ffmpeg(this.uri)
 
-      this.properties.streams.forEach(stream => {
-        demuxCmd.output(`${stream.index}_${stream.codec_type}.mkv`)
+      inStreams.forEach(stream => {
+        const outFile = `${stream.index}_${stream.codec_type}_${stream.tags.language || ''}.mkv`
+        demuxCmd.output(outFile)
         demuxCmd.outputOptions([
           `-map 0:${stream.index}`,
           '-c', 'copy',
           '-f', 'matroska'
         ])
-        demuxes.push(path.resolve(`${stream.index}_${stream.codec_type}.mkv`))
+        demuxes.push(path.resolve(outFile))
       })
 
       demuxCmd.on('start', cmd => console.log('running FFmpeg command', cmd))
