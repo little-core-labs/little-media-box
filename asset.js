@@ -7,10 +7,6 @@ class Asset {
     this.associations = []
 
     const opts = options //copy
-    if (opts.uri) {
-      this.uri = path.resolve(opts.uri)
-    }
-
     if (opts.assetType) {
       this.assetType = opts.assetType
     }
@@ -29,6 +25,12 @@ class Asset {
         console.error('Could not verify association', opts.association)
       }
     }
+
+    if (opts.uri) {
+      this.uri = path.resolve(opts.uri)
+      this.assetType = this.getLikelyType()
+    }
+
   }
   verifyAssociation(association) {
     return association instanceof Delivery ||
@@ -36,6 +38,21 @@ class Asset {
       association instanceof Source ||
       association instanceof Target ||
       association instanceof Track
+  }
+  getLikelyType() {
+    if (!this.uri) {
+      throw new Error("Must set this Asset's `.options.uri`")
+    }
+
+    if ([
+      '.jpg', '.png', '.jpeg', '.tif', '.tiff'
+    ].includes(path.extname(this.uri).toLowerCase())) {
+        return 'image'
+    } else if ([
+      '.xml', '.csv', '.txt'
+    ].includes(path.extname(this.uri).toLowerCase())) {
+      return 'metadata'
+    }
   }
 }
 
