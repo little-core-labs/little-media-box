@@ -81,4 +81,4 @@ class Package {
   }
 }
 
-module.exports = { Asset, AudioTrack, Delivery, Package, Source, SubtitleTrack, Track, VideoTrack }
+module.exports = { Asset, AudioTrack, Delivery, Package, Source, SubtitleTrack, Target, Track, VideoTrack }
