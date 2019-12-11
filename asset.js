@@ -1,9 +1,11 @@
 const path = require('path')
 const { Delivery, Package, Source, Track } = require('./index')
 const Target = require('./target')
+const uuidv4 = require('uuid/v4')
 
 class Asset {
   constructor(options = {}) {
+    this.uuid = uuidv4()
     this.associations = []
 
     const opts = options //copy
