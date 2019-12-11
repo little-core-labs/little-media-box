@@ -1,3 +1,4 @@
+const Asset = require('./asset')
 const Source = require('./source')
 const Target = require('./target')
 const { AudioTrack, SubtitleTrack, VideoTrack, Track } = require('./track')
@@ -80,4 +81,4 @@ class Package {
   }
 }
 
-module.exports = { AudioTrack, Delivery, Package, Source, SubtitleTrack, Track, VideoTrack }
+module.exports = { Asset, AudioTrack, Delivery, Package, Source, SubtitleTrack, Track, VideoTrack }
