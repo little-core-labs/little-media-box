@@ -41,8 +41,6 @@ class Source {
       const demuxes = []
       const inStreams = []
 
-      const streamsIterator = streams.entries()
-
       for (let s of streams) {
         inStreams.push(this.properties.streams[s])
       }
