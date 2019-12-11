@@ -11,7 +11,9 @@
   "dependencies": {
     "fluent-ffmpeg": "^2.1.2",
     "get-uri": "^2.0.4",
+    "mocha": "^6.2.2",
     "nanoprocess": "^0.8.0",
+    "nyc": "^14.1.1",
     "smpte-timecode": "^1.2.3",
     "uuid": "^3.3.3"
   }
