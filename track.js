@@ -1,4 +1,5 @@
 const Source = require('./source')
+const Target = require('./target')
 const Timecode = require('smpte-timecode')
 const uuidv4 = require('uuid/v4')
 
@@ -45,6 +46,7 @@ class Track {
       throw new Error(`Error assigning demux at array index ${opts.streamIndex}`, e)
     }
   }
+
 }
 
 
@@ -120,6 +122,27 @@ class VideoTrack extends Track {
       projection: this.properties.projection ? this.properties.projection : 'none',
       stereoscopy: this.properties.side_data_type ? this.properties.type : '2D'
     }
+  }
+  qc(target) {
+    if (!(target instanceof Target)) {
+      throw new Error("Invalid Target provided")
+    }
+
+    const cl = target.config.limits.codec
+
+    return [
+      {
+        pix_fmt: cl.video.pix_fmt == this.properties.pix_fmt,
+        data: this.properties.pix_fmt
+      },
+      {
+        bit_rate: cl.video.bit_rate <= this.properties.bit_rate,
+        data: {
+          trackBitrate: this.properties.bit_rate,
+          limitBitrate: cl.video.bit_rate
+        }
+      }
+    ]
   }
 }
 
