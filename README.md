@@ -58,6 +58,12 @@ or more existent `Delivery`, `Package`, `Source`, `Target`, or `Track` object.
 
 A URI pointing to the `Asset`. May be a local file or a remote HTTP location.
 
+#### `asset.getLikelyType()`
+
+Determine the *likely* asset type based upon the filename of the given
+`options.uri`. This is a *naive* assessment, run at instantiation by the Asset
+class.
+
 ### `const delivery = new Delivery(sources[, options])`
 
 Creates and returns a new `Delivery` object, comprised of the provided
