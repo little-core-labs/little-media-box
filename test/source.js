@@ -1,10 +1,7 @@
-const assert = require('assert')
+const test = require('tape')
 
-const { Source } = require('../index')
+const { Source } = require('../source')
 
-describe('Source', () => {
-  it('should create a new Source with properties populated', async() => {
-    const src = await new Source('./test/subtitles.mkv')
-    assert(src instanceof Source)
-  })
+test('new Source(uri[, opts])', (t) => {
+  t.end()
 })
