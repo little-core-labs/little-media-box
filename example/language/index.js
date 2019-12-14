@@ -1,36 +1,17 @@
-const Media = require('../../index')
+const { Source } = require('../../source')
+const path = require('path')
 
-/*
- * Identify all of the Romance languages in the example Matroska file, then
- * demux those tracks into individual, informally-named demux files.
- */
-async function main() {
-  const romanceLanguages = [
-    'fre',
-    'spa',
-    'por'
-  ]
+const romanceLanguages = [ 'fre', 'spa', 'por' ]
+const source = new Source(path.resolve(__dirname, 'example.mkv'))
 
-  const subtitleTracks = []
+source.probe((err, probe) => {
+  const subtitleStreams = []
 
-  const src = await new Media.Source('./example.mkv')
-
-  src.properties.streams.forEach(stream => {
-    if (stream.codec_type == 'subtitle') {
-      subtitleTracks.push(new Media.SubtitleTrack(src, stream.index))
+  for (const stream of probe.streams) {
+    if ('subtitle' === stream.codec_type) {
+      subtitleStreams.push(stream)
     }
-  })
+  }
 
-  const romanceSubs = subtitleTracks.filter(st => {
-    return romanceLanguages.includes(st.properties.tags.language)
-  }).map(rs => {
-    return rs.properties.index
-  })
-
-  const romanceLanguageSubs = await src.demux(romanceSubs)
-
-  console.log('Found & demuxed the following romance language subtitle tracks',
-    romanceLanguageSubs)
-}
-
-main()
+  console.log(subtitleStreams)
+})

@@ -1,11 +1,34 @@
 const path = require('path')
-const Target = require('./target')
-const uuidv4 = require('uuid/v4')
-const { Delivery, Package, Source, Track } = require('./index')
+const uuid = require('uuid/v4')
 
+/**
+ * An array of known image ext
+ * @private
+ */
+const IMAGE_EXTNAMES = [
+  '.jpeg',
+  '.jpg',
+  '.png',
+  '.tif',
+  '.tiff'
+]
+
+/**
+ * @private
+ */
+const METADATA_EXTNAME = [
+  '.csv',
+  '.txt',
+  '.xml'
+]
+
+/**
+ * @public
+ * @class
+ */
 class Asset {
-  constructor(options = {}) {
-    this.uuid = uuidv4()
+  constructor(opts) {
+    this.id = uuid()
     this.associations = []
 
     const opts = options //copy
@@ -32,26 +55,20 @@ class Asset {
       this.uri = path.resolve(opts.uri)
       this.assetType = this.getLikelyType()
     }
+  }
 
-  }
-  verifyAssociation(association) {
-    return association instanceof Delivery ||
-      association instanceof Package ||
-      association instanceof Source ||
-      association instanceof Target ||
-      association instanceof Track
-  }
-  getLikelyType() {
+  get assetType() {
+
     if (!this.uri) {
-      throw new Error("Must set this Asset's `.options.uri`")
+      return null
     }
 
+    const extname = path.extname(this.uri)
+
     if ([
-      '.jpg', '.png', '.jpeg', '.tif', '.tiff'
     ].includes(path.extname(this.uri).toLowerCase())) {
         return 'image'
     } else if ([
-      '.xml', '.csv', '.txt'
     ].includes(path.extname(this.uri).toLowerCase())) {
       return 'metadata'
     }
