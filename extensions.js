@@ -4,8 +4,11 @@ const image = new Set(Array.from(require('image-extensions')).sort())
 const video = new Set(Array.from(require('video-extensions')).sort())
 const text = new Set(Array.from(require('text-extensions')).sort())
 
+text.add('ass') // Aegisub Advanced Substation Alpha File
 text.add('m3u8') // UTF-8 M3U
 text.add('mpd') // MPEG-DASH manifest file
+text.add('srt') // SubRip Subtitle File
+text.add('vtt') // Web Video Text Tracks File
 
 video.add('264')
 video.add('3gp')
