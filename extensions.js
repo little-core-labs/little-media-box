@@ -10,18 +10,17 @@ text.add('mpd') // MPEG-DASH manifest file
 text.add('srt') // SubRip Subtitle File
 text.add('vtt') // Web Video Text Tracks File
 
-video.add('264')
-video.add('3gp')
-video.add('3gp2')
-video.add('3gpp')
-video.add('3gpp2')
+video.add('264') // Ripped Video Data File
+video.add('3gp') // 3GPP Multimedia File
+video.add('3gp2') // 3GPP Multimedia File
+video.add('3gpp') // 3GPP Media File
+video.add('3gpp2') // 3GPP2 Multimedia File
 
-video.add('h264')
-video.add('h265')
-video.add('hevc')
+video.add('h264') // H.264 Encoded Video File
+video.add('hevc') // High Efficiency Video Coding File
 
-video.add('m1v')
-video.add('ts') // (also `.mpeg`) by adding this we overload `.ts` over TypeScript files
+video.add('m1v') // MPEG-1 Video File
+video.add('ts') // Video Transport Stream File (also `.mpeg`) - by adding this we overload `.ts` over TypeScript files
 
 /**
  * The `Extensions` class represents an extended `Array` that  contains a
@@ -146,8 +145,12 @@ class Extensions extends Array {
           return 1
         } else if (-1 === left && -1 === right) {
           return 0
+        } else if (left === right) {
+          return 0
+        } else if (left < right) {
+          return -1
         } else {
-          return left === right ? 0 : left < right ? -1 : 1
+          return 1
         }
       })
 
