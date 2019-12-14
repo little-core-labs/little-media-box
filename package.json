@@ -9,12 +9,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "audio-extensions": "0.0.0",
     "batch": "^0.6.1",
+    "binary-extensions": "^2.0.0",
     "debug": "^4.1.1",
     "ffmpeg-static": "^2.7.0",
     "ffprobe-static": "^3.0.0",
     "fluent-ffmpeg": "^2.1.2",
     "get-uri": "^2.0.4",
+    "image-extensions": "^1.1.0",
     "mkvmerge-static": "^1.0.0",
     "mkvmerge-static-linux": "^0.1.0",
     "mocha": "^6.2.2",
@@ -28,8 +31,10 @@
     "simple-get": "^3.1.0",
     "smpte-timecode": "^1.2.3",
     "streamx": "^2.5.0",
+    "text-extensions": "^2.0.0",
     "through2": "^3.0.1",
-    "uuid": "^3.3.3"
+    "uuid": "^3.3.3",
+    "video-extensions": "^1.1.0"
   },
   "devDependencies": {
     "nyc": "^14.1.1",
