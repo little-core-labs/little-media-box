@@ -1,78 +1,113 @@
+const extensions = require('./extensions')
+const Resource = require('nanoresource')
+const through = require('through2')
+const getUri = require('get-uri')
+const debug = require('debug')('little-media-box:asset')
+const ready = require('nanoresource-ready')
 const path = require('path')
+const pump = require('pump')
 const uuid = require('uuid/v4')
+const url = require('url')
+const fs = require('fs')
 
 /**
- * An array of known image ext
- * @private
- */
-const IMAGE_EXTNAMES = [
-  '.jpeg',
-  '.jpg',
-  '.png',
-  '.tif',
-  '.tiff'
-]
-
-/**
- * @private
- */
-const METADATA_EXTNAME = [
-  '.csv',
-  '.txt',
-  '.xml'
-]
-
-/**
+ * The `Asset` class represents a container for an external asset
+ * that has semantic associations with other objects.
  * @public
  * @class
+ * @extends nanoresource
  */
-class Asset {
-  constructor(opts) {
-    this.id = uuid()
-    this.associations = []
+class Asset extends Resource {
 
-    const opts = options //copy
-    if (opts.assetType) {
-      this.assetType = opts.assetType
+  /**
+   * `Asset` class constructor.
+   * @param {String} uri
+   * @param {?(Object)} opts
+   * @param {?(String)} opts.id
+   * @param {?(String)} opts.cwd
+   * @param {?(String)} opts.type
+   * @param {?(Array<String>)} opts.associations
+   */
+  constructor(uri, opts) {
+    super()
+
+    if (!opts || 'object' !== typeof opts) {
+      opts = {}
     }
 
-    if (opts.association) {
-      if (Array.isArray(opts.association) &&
-        opts.association.every(a => {
-          verifyAssociation(a)
-        })
-      ) {
-        this.associations = opts.association
-      }
-      else if (this.verifyAssociation(opts.association)) {
-        this.associations = [opts.association]
-      } else {
-        console.error('Could not verify association', opts.association)
-      }
-    }
+    this.id = opts.id || uuid()
+    this.uri = uri
+    this.cwd = opts.cwd || process.cwd()
+    this.type = opts.type || extensions.typeof(path.extname(this.uri))
+    this.byteLength = 0
+    this.associations = Array.from(opts.associations || [])
+  }
 
-    if (opts.uri) {
-      this.uri = path.resolve(opts.uri)
-      this.assetType = this.getLikelyType()
+  /**
+   * Implements the abstract `_open()` method for `nanoresource`
+   * Opens the asset source stream and initializes internal state.
+   * @protected
+   * @param {Function} callback
+   */
+  _open(callback) {
+    const uri = url.parse(this.uri)
+    if (/https?:/.test(uri.protocol)) {
+      head(this.uri, (err, res) => {
+        if (err) { return callback(err) }
+        this.byteLength = parseInt(res.headers['content-length'])
+        callback(null)
+      })
+    } else {
+      const pathname = path.resolve(this.cwd, uri.path)
+      fs.stat(pathname, (err, stats) => {
+        if (err) { return callback(err) }
+        this.uri = `file://${pathname}`
+        this.byteLength = stats.size
+        callback(null)
+      })
     }
   }
 
-  get assetType() {
+  /**
+   * Wait for asset to be ready (opened) calling `callback()`
+   * when it is.
+   * @param {Function}
+   */
+  ready(callback) {
+    ready(this, callback)
+  }
 
-    if (!this.uri) {
-      return null
+  /**
+   * Creates a read stream for the asset URI.
+   * @param {?(Object)} opts
+   * @return {Stream}
+   */
+  createReadStream(opts) {
+    if (!opts || 'object' !== typeof opts) {
+      opts = {}
     }
 
-    const extname = path.extname(this.uri)
+    const readStream = through()
+    const { uri } = this
 
-    if ([
-    ].includes(path.extname(this.uri).toLowerCase())) {
-        return 'image'
-    } else if ([
-    ].includes(path.extname(this.uri).toLowerCase())) {
-      return 'metadata'
+    getUri(uri, onstream)
+
+    return readStream
+
+    function onstream(err, sourceStream) {
+      if (err) { return readStream.emit('error', err) }
+      pump(sourceStream, readStream, onpump)
+    }
+
+    function onpump(err) {
+      if (err) { return readStream.emit('error', err) }
     }
   }
 }
 
-module.exports = Asset
+/**
+ * Module exports.
+ */
+module.exports = {
+  Asset
+}

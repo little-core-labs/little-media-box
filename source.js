@@ -1,4 +1,3 @@
-const { Transform } = require('streamx')
 const { ffmpeg } = require('./ffmpeg')
 const { head } = require('simple-get')
 const Resource = require('nanoresource')
