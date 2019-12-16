@@ -2,6 +2,7 @@ const { ffmpeg } = require('./ffmpeg')
 const { head } = require('simple-get')
 const Resource = require('nanoresource')
 const through = require('through2')
+const assert = require('assert')
 const getUri = require('get-uri')
 const ready = require('nanoresource-ready')
 const debug = require('debug')('little-media-box:source')
@@ -35,6 +36,20 @@ function createDemuxOutputOptions(extras) {
 class Source extends Resource {
 
   /**
+   * @static
+   * @param {String} uri
+   * @param {?(Object)} opts
+   * @return {Source}
+   */
+  static from (uri, opts) {
+    if (uri instanceof Source) {
+      return uri
+    }
+
+    return new this(uri, opts)
+  }
+
+  /**
    * `Source` class constructor
    * @param {String} uri
    * @param {?(Object)} opts
@@ -54,17 +69,6 @@ class Source extends Resource {
     this.duration = 0
     this.byteLength = 0
     this.demuxOptions = createDemuxOutputOptions(opts.demuxOptions)
-
-    // @TODO(jwerle): remove this and refactor rest
-    // of module to use `probe()`
-    this.properties = null
-    this.ready(() => {
-      this.probe((err, properties) => {
-        if (!err && properties) {
-          this.properties = properties
-        }
-      })
-    })
   }
 
   /**
@@ -108,6 +112,8 @@ class Source extends Resource {
    * @param {Function}
    */
   ready(callback) {
+    assert('function' === typeof callback,
+      'Expecting callback to be a function.')
     ready(this, callback)
   }
 
@@ -152,7 +158,11 @@ class Source extends Resource {
       opts = {}
     }
 
-    ready(this, () => {
+    assert('function' === typeof callback,
+      'Expecting callback to be a function.')
+
+    this.ready((err) => {
+      if (err) { return callback(err) }
       const { uri } = this
       const stream = this.createReadStream(opts)
 
@@ -196,6 +206,9 @@ class Source extends Resource {
     if (false === Array.isArray(streams)) {
       streams = []
     }
+
+    assert('function' === typeof callback,
+      'Expecting callback to be a function.')
 
     const { cwd = this.cwd } = opts
     const { demuxOptions } = this

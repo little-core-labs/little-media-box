@@ -1,32 +1,71 @@
+const Resource = require('nanoresource')
+const assert = require('assert')
+const path = require('path')
 const fs = require('fs')
 
-const { Package } = require('./index')
+/**
+ * @public
+ * @class
+ * @extends Resource
+ */
+class Target extends Resource {
 
-class Target {
-  constructor(options = {}) {
-    if (options.package) {
-      if (!(options.package instanceof Package)) {
-        throw new Error('Package is not a valid MediaPackage')
-      } else {
-        this.package = options.package
-        this.package.assignTargets(this)
-      }
+  /**
+   * `Target` class constructor.
+   * @param {String} name
+   * @param {?(Object)} opts
+   * @param {?(String)} opts.cwd
+   */
+  constructor(name, opts) {
+    super()
+
+    if (!opts || 'object' !== typeof opts) {
+      opts = {}
     }
-    if (!options.target) {
-      throw new Error(`No target name specified. ${options}`)
-    }
-    else if (options.target && fs.existsSync(`./targets/${options.target}.json`)) {
-      this.name = options.target
-    } else {
-      throw new Error('Not a defined target')
-    }
-    this.config = JSON.parse(fs.readFileSync(`./targets/${options.target}.json`))
+
+    assert(name && 'string' === typeof name,
+      'Expecting name to be a string.')
+
+    this.cwd = opts.cwd || process.cwd()
+    this.config = new Map()
+    this.filename = path.resolve(this.cwd, this.name)
   }
-  assessTasks() {
-    if (!this.package) {
-      console.error('Assign a Package to this Target first')
-    }
+
+  get limits() {
+    return this.config.get('limits') || null
+  }
+
+  get name() {
+    return this.config.get('name') || null
+  }
+
+  /**
+   * Implements the abstract `_open()` method for `nanoresource`
+   * Reads configuration from file system and stores state on
+   * the instance calling `callback()` upon success or error.
+   * @protected
+   * @param {Function} callback
+   */
+  _open(callback) {
+    fs.readFile(this.filename, (err, buffer) => {
+      if (err) { return callback(err) }
+      try {
+        const config = JSON.parse(buffer.toString('utf8'))
+      } catch (err) {
+        return callback(err)
+      }
+    })
+  }
+
+  /**
+   * Implements the abstract `_close()` method for `nanoresource`
+   * Will clear internal state calling `callback()` upon success
+   * or error.
+   * @protected
+   * @param {Function} callback
+   */
+  _close(callback) {
+    this.config.clear()
+    process.nextTick(callback, null)
   }
 }
-
-module.exports = Target
