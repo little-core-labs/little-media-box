@@ -21,6 +21,7 @@
     "mkvmerge-static": "^1.0.0",
     "mkvmerge-static-linux": "^0.1.0",
     "mocha": "^6.2.2",
+    "mutexify": "^1.2.0",
     "nanoprocess": "^0.8.0",
     "nanoresource": "^1.3.0",
     "nanoresource-pool": "^0.3.1",
