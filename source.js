@@ -169,8 +169,6 @@ class Source extends Resource {
       this.active()
       ffmpeg(stream).ffprobe((err, info) => {
         this.inactive()
-        // @TODO(jwerle): remove this
-        this.properties = info
         callback(err, info)
       })
     })
