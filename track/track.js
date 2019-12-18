@@ -16,6 +16,8 @@ const toTrackTypeName = (f) => f.name.toLowerCase().replace('track', '')
 const noop = () => void 0
 
 /**
+ * The `Track` class represents a base class for other track classes
+ * such as `VideoTrack`, `AudioTrack`, and `SubtitleTrack`.
  * @public
  * @class
  * @extends nanoresource
@@ -23,6 +25,10 @@ const noop = () => void 0
 class Track extends Resource {
 
   /**
+   * Creates a new `Track` instance from input where
+   * input may be another track, a `Source` instance or
+   * some input for creating a `Source` instance, such as
+   * URI string.
    * @static
    * @param {Source|String} source
    * @param {?(Object)} opts
@@ -30,16 +36,12 @@ class Track extends Resource {
    * @return {Track}
    */
   static from(source, opts) {
-    if (source instanceof Track) {
-      return source
-    }
-
     if (!opts || 'object' !== typeof opts) {
       opts = {}
     }
 
     // coerce source into `Source` instance
-    source = Source.from(source)
+    source = Source.from(source, opts)
 
     // derive stream index from the class level property `STREAM_INDEX`
     // where `opts.index` takes precedence and `0` is the default

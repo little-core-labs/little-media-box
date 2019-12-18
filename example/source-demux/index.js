@@ -1,6 +1,7 @@
 const prettyBytes = require('pretty-bytes')
 const { Source } = require('../../source')
 const prettyTime = require('pretty-ms')
+const { demux } = require('../../demux')
 const Timecode = require('smpte-timecode')
 const Progress = require('progress')
 const path = require('path')
@@ -52,7 +53,7 @@ source.open((err) => {
     })
 
     let timecode = null
-    const demux = source.demux((err, outputs) => {
+    const demuxer = demux(source, (err, outputs) => {
       if (err) {
         console.error('error:', err.message)
       } else {
@@ -63,7 +64,7 @@ source.open((err) => {
       }
     })
 
-    demux.on('progress', (info) => {
+    demuxer.on('progress', (info) => {
       try {
         const dropFrameSupport = [29.97, 59.94]
         const [num, den] = probe.streams[0].r_frame_rate.split('/')
