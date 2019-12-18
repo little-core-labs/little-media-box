@@ -12,7 +12,8 @@ const FFPROBE_BIN_PATH = require('ffprobe-static').path
  */
 const FFMPEG_BIN_PATH = require('ffmpeg-static').path
 
-// configure ffmpeg/ffprobe
+// initial configuration for `ffmpeg` and `ffprobe` binary paths
+// consumers of `fluent-ffmpeg` can overload the path on their own
 ffmpeg.setFfmpegPath(FFMPEG_BIN_PATH)
 ffmpeg.setFfprobePath(FFPROBE_BIN_PATH)
 

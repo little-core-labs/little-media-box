@@ -38,7 +38,8 @@
     "text-extensions": "^2.0.0",
     "through2": "^3.0.1",
     "uuid": "^3.3.3",
-    "video-extensions": "^1.1.0"
+    "video-extensions": "^1.1.0",
+    "x264-static": "^0.1.0"
   },
   "devDependencies": {
     "nyc": "^14.1.1",

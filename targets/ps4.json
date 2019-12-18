@@ -14,7 +14,7 @@
   "name": "ps4",
   "enabled": [ "hls" ],
   "options": {
-    "all": {
+    "defaults": {
       "audio": {
         "channels": 2,
         "codec": [

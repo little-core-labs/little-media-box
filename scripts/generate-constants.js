@@ -41,19 +41,16 @@ function onread(err, buffer) {
       exported.push(define(stream, demuxer[0], 'demux', demuxer[0], demuxer[1]))
     }
 
-    stream.write(
-`
-
+    stream.write(`
 /**
  * Module exports.
  */
 module.exports = {
   ${exported.join(',\n  ')}
-}`.trim()
-    )
+}`)
 
     stream.end()
-
+    console.log('Generated %s', output)
   })
 }
 

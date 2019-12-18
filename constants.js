@@ -1,4 +1,4 @@
-// Generated on Tue Dec 17 2019 21:57:56 GMT-0500 (Eastern Standard Time)
+// Generated on Wed Dec 18 2019 10:40:02 GMT-0500 (Eastern Standard Time)
 
 const MUX_3G2_FORMAT = '3g2' // 3GP2 (3GPP2 file format)
 const MUX_3GP_FORMAT = '3gp' // 3GP (3GPP file format)
@@ -478,6 +478,7 @@ const DEMUX_XWD_PIPE_FORMAT = 'xwd_pipe' // piped xwd sequence
 const DEMUX_XWMA_FORMAT = 'xwma' // Microsoft xWMA
 const DEMUX_YOP_FORMAT = 'yop' // Psygnosis YOP
 const DEMUX_YUV4MPEGPIPE_FORMAT = 'yuv4mpegpipe' // YUV4MPEG pipe
+
 /**
  * Module exports.
  */
