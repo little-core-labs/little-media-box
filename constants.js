@@ -1,4 +1,4 @@
-// Generated on Tue Dec 17 2019 21:52:36 GMT-0500 (Eastern Standard Time)
+// Generated on Tue Dec 17 2019 21:57:56 GMT-0500 (Eastern Standard Time)
 
 const MUX_3G2_FORMAT = '3g2' // 3GP2 (3GPP2 file format)
 const MUX_3GP_FORMAT = '3gp' // 3GP (3GPP file format)
