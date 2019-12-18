@@ -122,6 +122,10 @@ function lookup(filter, opts) {
 
   return Object.values(codes).reverse().filter((item) => {
     let result = true
+    if (!item || 'object' !== typeof item) {
+      return false
+    }
+
     for (const key of keys) {
       if (key in filter && !test(filter[key], item[key])) {
         if (alias[key] in item && test(filter[key], item[alias[key]])) {
