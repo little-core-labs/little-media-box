@@ -111,6 +111,7 @@ class Delivery extends Pool {
    * Demux sources into output streams. Outputs
    * @param {?(Object)} opts
    * @param {Function} callback
+   * @return {EventEmitter}
    */
   demux(opts, callback) {
     if ('function' === typeof opts) {
@@ -127,8 +128,9 @@ class Delivery extends Pool {
     const { sources } = this
     const demuxes = {}
     const emitter = new EventEmitter()
-    const batch = new Batch().concurrency(concurrency)
+    const batch = new Batch()
 
+    batch.concurrency(concurrency)
     emitter.setMaxListeners(0)
 
     for (const source of sources) {
