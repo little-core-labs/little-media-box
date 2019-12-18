@@ -22,7 +22,7 @@ const fs = require('fs')
  */
 function createDemuxOutputOptions(extras) {
   const options = ['-c', 'copy', '-f', 'matroska']
-  return options.concat(extras || [])
+  return Array.from(new Set(options.concat(extras || [])))
 }
 
 /**
@@ -36,14 +36,44 @@ function createDemuxOutputOptions(extras) {
 class Source extends Resource {
 
   /**
+   * Creates a new `Source` instance from input where input
+   * may be another source in which the state is copied into
+   * a new instance. Input may be a `Track` instance in which
+   * the same applies to the `Source` instance the track points
+   * to.
    * @static
-   * @param {String} uri
+   * @param {String|Source|Track|Object} uri
    * @param {?(Object)} opts
    * @return {Source}
    */
   static from (uri, opts) {
+    let source = null
+
+    if (!opts || 'object' !== typeof opts) {
+      opts = {}
+    }
+
+    // `Source` instance given
     if (uri instanceof Source) {
-      return uri
+      source = uri
+    }
+
+    // possibly a `Track` instance or something that "holds"
+    // a source was given (quack quack duck duck)
+    if (uri.source instanceof Source) {
+      source = uri.source
+    }
+
+    // create a new `Source` from existing instance copying
+    // properties over allowing input `opts` to take precedence
+    if (source) {
+      return new this(source.uri, {
+        id: opts.id || source.id,
+        cwd: opts.cwd || source.cwd,
+        duration: opts.duration || source.duration,
+        byteLength: opts.byteLength || source.byteLength,
+        demuxOptions: opts.demuxOptions || source.demuxOptions
+      })
     }
 
     return new this(uri, opts)
@@ -55,6 +85,9 @@ class Source extends Resource {
    * @param {?(Object)} opts
    * @param {?(String)} opts.id
    * @param {?(String)} opts.cwd
+   * @param {?(Number)} opts.duration
+   * @param {?(Number)} opts.byteLength
+   * @param {?(Array)} opts.demuxOptions
    */
   constructor(uri, opts) {
     super()
@@ -66,8 +99,8 @@ class Source extends Resource {
     this.id = opts.id || uuid()
     this.uri = uri
     this.cwd = opts.cwd || process.cwd()
-    this.duration = 0
-    this.byteLength = 0
+    this.duration = opts.duration || 0
+    this.byteLength = opts.byteLength || 0
     this.demuxOptions = createDemuxOutputOptions(opts.demuxOptions)
   }
 
@@ -78,6 +111,10 @@ class Source extends Resource {
    * @param {Function} callback
    */
   _open(callback) {
+    if (this.byteLength > 0) {
+      return process.nextTick(callback, null)
+    }
+
     const uri = url.parse(this.uri)
     if (/https?:/.test(uri.protocol)) {
       head(this.uri, (err, res) => {
@@ -180,101 +217,6 @@ class Source extends Resource {
    */
   stat(callback) {
     this.probe(callback)
-  }
-
-  /**
-   * Demux source into output streams. Outputs
-   * @param {?(Array)} streams
-   * @param {?(Object)} opts
-   * @param {Function} callback
-   */
-  demux(streams, opts, callback) {
-    if ('function' === typeof opts) {
-      callback = opts
-    }
-
-    if ('function' === typeof streams) {
-      callback = streams
-    }
-
-    if (!opts || 'object' !== opts) {
-      opts = {}
-    }
-
-    if (false === Array.isArray(streams)) {
-      streams = []
-    }
-
-    assert('function' === typeof callback,
-      'Expecting callback to be a function.')
-
-    const { cwd = this.cwd } = opts
-    const { demuxOptions } = this
-    const pending = []
-    const outputs = new Set()
-    const stream = this.createReadStream()
-    const inputs = []
-    const demux = ffmpeg(stream)
-
-    const source = this
-
-    callback = once(callback)
-
-    this.active()
-    this.probe(onprobe)
-
-    return demux
-
-    function onprobe(err, info) {
-      if (err) { return callback(err) }
-
-      // cherry pick streams if indices given
-      if (streams.length > 0) {
-        for (const index of streams) {
-          inputs.push(info.streams[index])
-        }
-      } else {
-        inputs.push(...info.streams)
-      }
-
-      for (const input of inputs) {
-        const { index, codec_type, tags } = input
-        const outputOptions = demuxOptions.concat([`-map 0:${index}`])
-        const language = tags.language || ''
-        const extname = opts.extname || '.mkv'
-        const output = `${index}_${codec_type}_${language}${extname}`
-
-        debug('demux: output:', output)
-        debug('demux: options:', demuxOptions)
-
-        demux.output(output)
-        demux.outputOptions(outputOptions)
-
-        outputs.add(path.resolve(cwd, output))
-      }
-
-      demux.on('error', onerror)
-      demux.on('end', onend)
-
-      process.nextTick(() => demux.run())
-    }
-
-    function onerror(err) {
-      source.inactive()
-      callback(err)
-    }
-
-    function onend(err, stdout, stderr) {
-      debug('ffmpeg:', stdout)
-      debug('ffmpeg:', stderr)
-
-      if (err) {
-        return callback(err)
-      }
-
-      source.inactive()
-      callback(null, Array.from(outputs))
-    }
   }
 }
 
