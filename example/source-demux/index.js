@@ -59,7 +59,7 @@ source.open((err) => {
       } else {
         console.log('> demux: outputs:')
         console.log(outputs
-          .map((output) => output.replace(process.cwd(), '.'))
+          .map((output) => output.uri.replace(process.cwd(), '.'))
           .join('\n'))
       }
     })

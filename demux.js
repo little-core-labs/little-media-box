@@ -2,6 +2,7 @@ const { Source } = require('./source')
 const { ffmpeg } = require('./ffmpeg')
 const { Track } = require('./track')
 const assert = require('assert')
+const Batch = require('batch')
 const debug = require('debug')('little-media-box:demux')
 const once = require('once')
 const path = require('path')
@@ -10,7 +11,7 @@ const path = require('path')
  * @public
  * @param {Source|Track|String|Object} source
  * @param {?(Object)} opts
- * @param {Function} callback
+ * @param {Function<Error, Array<Source>>} callback
  */
 function demux(source, opts, callback) {
   // coerce into `Source` instance and get own copy
@@ -26,11 +27,12 @@ function demux(source, opts, callback) {
 
   assert('function' === typeof callback, 'Expecting callback to be a function.')
 
+  const batch = new Batch()
   const inputs = []
   const outputs = new Set()
   const pending = []
-
   const streams = Array.isArray(opts.streams) ? opts.streams : []
+
   const stream = source.createReadStream()
   const demuxer = ffmpeg(stream)
 
@@ -71,7 +73,7 @@ function demux(source, opts, callback) {
       demuxer.output(output)
       demuxer.outputOptions(outputOptions)
 
-      outputs.add(path.resolve(cwd, output))
+      outputs.add(Source.from(path.resolve(cwd, output), opts))
     }
 
     demuxer.on('error', onerror)
@@ -94,7 +96,15 @@ function demux(source, opts, callback) {
     }
 
     source.inactive()
-    callback(null, Array.from(outputs))
+
+    for (const output of outputs) {
+      batch.push((next) => output.ready(next))
+    }
+
+    batch.end((err) => {
+      if (err) { return callback(err) }
+      callback(null, Array.from(outputs))
+    })
   }
 }
 
