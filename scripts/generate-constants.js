@@ -43,6 +43,7 @@ function onread(err, buffer) {
 
     stream.write(
 `
+
 /**
  * Module exports.
  */
