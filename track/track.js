@@ -1,4 +1,4 @@
-const { TrackProperties } = require('./track')
+const { TrackProperties } = require('./properties')
 const { Source } = require('../source')
 const Resource = require('nanoresource')
 const assert = require('assert')
@@ -8,7 +8,8 @@ const uuid = require('uuid/v4')
 
 const {
   TrackPropertiesMissingFormatError,
-  TrackPropertiesMissingStreamError
+  TrackPropertiesMissingStreamError,
+  TrackTypeMismatchError
 } = require('./error')
 
 // quick util
@@ -43,9 +44,9 @@ class Track extends Resource {
     // coerce source into `Source` instance
     source = Source.from(source, opts)
 
-    // derive stream index from the class level property `STREAM_INDEX`
+    // derive stream index from the class level property `DEFAULT_STREAM_INDEX`
     // where `opts.index` takes precedence and `0` is the default
-    const { streamIndex = this.STREAM_INDEX || 0 } = opts
+    const { streamIndex = this.DEFAULT_STREAM_INDEX || 0 } = opts
     return new this(
       source,
       'number' === typeof streamIndex ? streamIndex : 0,
@@ -59,7 +60,7 @@ class Track extends Resource {
    * @accessor
    * @type {String}
    */
-  static get TYPE_NAME() {
+  static get STREAM_TYPE() {
     return toTrackTypeName(this)
   }
 
@@ -69,7 +70,7 @@ class Track extends Resource {
    * @accessor
    * @type {Number}
    */
-  static get STREAM_INDEX() {
+  static get DEFAULT_STREAM_INDEX() {
     return 0
   }
 
@@ -95,23 +96,22 @@ class Track extends Resource {
 
     this.id = opts.id || uuid()
     this.source = source
-    this.properties = new TrackProperties(this)
-    this.streamIndex = streamIndex
+    this.properties = new TrackProperties(this, { streamIndex })
   }
 
   /**
    * The track's source media type represented as a string (audio, video,
    * subtitle, etc).
    *
-   * The static class property `TYPE_NAME` on the instance's class constructor
+   * The static class property `STREAM_TYPE` on the instance's class constructor
    * is used to determine the track type falling back to the class name,
    * lower cased, with the string `/track/i` removed.
    * @accessor
    * @type {String}
    */
   get type() {
-    if ('TYPE_NAME' in this.constructor) {
-      return this.constructor.TYPE_NAME
+    if ('STREAM_TYPE' in this.constructor) {
+      return this.constructor.STREAM_TYPE
     } else {
       return toTrackTypeName(this.constructor) || 'track'
     }
@@ -156,6 +156,15 @@ class Track extends Resource {
   }
 
   /**
+   * The stream index for this track.
+   * @accessor
+   * @type {Number}
+   */
+  get streamIndex() {
+    return this.properties.streamIndex
+  }
+
+  /**
    * Implements the abstract `_open()` method for `nanoresource`
    * Opens the internal source stream, probes for stream information,
    * and initializes track state based on the stream index.
@@ -163,7 +172,14 @@ class Track extends Resource {
    * @param {Function} callback
    */
   _open(callback) {
-    this.properties.update(callback)
+    this.properties.update((err) => {
+      if (err) { return callback(err) }
+      if (this.type !== this.properties.stream.codec_type) {
+        callback(new TrackTypeMismatchError(this))
+      } else {
+        callback(null)
+      }
+    })
   }
 
   /**
@@ -195,9 +211,9 @@ class Track extends Resource {
   ready(callback) {
     assert('function' === typeof callback,
       'Expecting callback to be a function.')
-    this.source.ready((err) => {
+    ready(this, (err) => {
       if (err) { return callback(err) }
-      ready(this, callback)
+      this.source.ready(callback)
     })
   }
 
