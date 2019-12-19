@@ -4,12 +4,23 @@ const { Track } = require('./track')
 const NOT_AVAILABLE = 'N/A'
 
 /**
+ * The default stream index of 'video' streams.
  * @public
  * @const
  */
-const STREAM_INDEX = 0
+const DEFAULT_STREAM_INDEX = 0
 
 /**
+ * The stream type (codec_type) for an `VideoTrack` track.
+ * @public
+ * @const
+ */
+const STREAM_TYPE = 'video'
+
+/**
+ * The `VideoTrack` class represents an extended `Track`
+ * that targets a video stream in the source the track
+ * points to.
  * @public
  * @class
  * @extends Track
@@ -17,12 +28,23 @@ const STREAM_INDEX = 0
 class VideoTrack extends Track {
 
   /**
+   * The default stream index for 'video'.
    * @static
    * @accessor
    * @type {Number}
    */
-  static get STREAM_INDEX() {
-    return STREAM_INDEX
+  static get DEFAULT_STREAM_INDEX() {
+    return DEFAULT_STREAM_INDEX
+  }
+
+  /**
+   * The name of the stream type for this 'video' track.
+   * @static
+   * @accessor
+   * @type {String}
+   */
+  static get STREAM_TYPE() {
+    return STREAM_TYPE
   }
 
   /**
@@ -31,7 +53,7 @@ class VideoTrack extends Track {
    * @param {?(Object)} opts
    */
   constructor(source, opts) {
-    super(source, VideoTrack.STREAM_INDEX, opts)
+    super(source, DEFAULT_STREAM_INDEX, opts)
   }
 
   /**
@@ -73,6 +95,8 @@ class VideoTrack extends Track {
  * Module exports.
  */
 module.exports =  {
-  VideoTrack,
-  STREAM_INDEX
+  DEFAULT_STREAM_INDEX,
+  STREAM_TYPE,
+
+  VideoTrack
 }
