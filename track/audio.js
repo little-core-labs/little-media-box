@@ -1,12 +1,23 @@
 const { Track } = require('./track')
 
 /**
+ * The default stream index of 'audio' streams.
  * @public
  * @const
  */
-const STREAM_INDEX = 1
+const DEFAULT_STREAM_INDEX = 1
 
 /**
+ * The stream type (codec_type) for an `AudioTrack` track.
+ * @public
+ * @const
+ */
+const STREAM_TYPE = 'audio'
+
+/**
+ * The `AudioTrack` class represents an extended `Track`
+ * that targets an audio stream in the source the track
+ * points to.
  * @public
  * @class
  * @extends Track
@@ -14,12 +25,23 @@ const STREAM_INDEX = 1
 class AudioTrack extends Track {
 
   /**
+   * The default stream index for 'audio'.
    * @static
    * @accessor
    * @type {Number}
    */
-  static get STREAM_INDEX() {
-    return STREAM_INDEX
+  static get DEFAULT_STREAM_INDEX() {
+    return DEFAULT_STREAM_INDEX
+  }
+
+  /**
+   * The name of the stream type for this audio tracks.
+   * @static
+   * @accessor
+   * @type {String}
+   */
+  static get STREAM_TYPE() {
+    return STREAM_TYPE
   }
 
   /**
@@ -28,7 +50,7 @@ class AudioTrack extends Track {
    * @param {?(Object)} opts
    */
   constructor(source, opts) {
-    super(source, AudioTrack.STREAM_INDEX, opts)
+    super(source, DEFAULT_STREAM_INDEX, opts)
   }
 
   /**
@@ -56,6 +78,8 @@ class AudioTrack extends Track {
  * Module exports.
  */
 module.exports = {
-  AudioTrack,
-  STREAM_INDEX
+  DEFAULT_STREAM_INDEX,
+  STREAM_TYPE,
+
+  AudioTrack
 }

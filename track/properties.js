@@ -1,5 +1,6 @@
 const constants = require('../constants')
 const iso639 = require('../iso-639')
+const assert = require('assert')
 const mutex = require('mutexify')
 const {
   TrackPropertiesMissingFormatError,
@@ -21,10 +22,12 @@ class TrackProperties extends Map {
   /**
    * `TrackProperties` class constructor.
    * @param {Track} track
+   * @param {Object} opts
    */
-  constructor(track) {
+  constructor(track, opts) {
     super()
 
+    this.streamIndex = opts.streamIndex
     this.track = track
     this.lock = mutex()
   }
@@ -88,21 +91,27 @@ class TrackProperties extends Map {
    * @type {?(String)}
    */
   get language() {
-    const { stream, format } = this
+    if (!this.stream || !this.format) { return null }
 
-    if (!stream || !format) {
-      return null
+    return (
+      (this.stream.tags && lookup(this.stream.tags.language)) ||
+      (this.format.tags && lookup(this.format.tags.language)) ||
+      iso639.codes.SPECIAL_UNDETERMINED_LANGUAGE
+    )
+
+    // lookup language
+    function lookup(language) {
+      if ('string' === typeof language) {
+        if (language in iso639.codes) {
+          return language
+        } else {
+          const query = iso639.codes.lookup(language, true)
+          if (query.length && query[0].code) {
+            return query[0].code
+          }
+        }
+      }
     }
-
-    if ('language' in stream.tags) {
-      return stream.tags.language
-    }
-
-    if ('language' in format.tags) {
-      return format.tags.language
-    }
-
-    return iso639.SPECIAL_UNDETERMINED_LANGUAGE
   }
 
   /**
@@ -196,9 +205,11 @@ class TrackProperties extends Map {
     this.lock((release) => {
       this.track.source.probe((err, probe) => {
         if (err) { return callback(err) }
-        const { streamIndex } = this.track
+        const { streamIndex } = this
         const { format } = probe
-        const stream = probe.streams.find((s) => s.index === streamIndex)
+        const stream = 1 === probe.streams.length
+          ? probe.streams[0]
+          : probe.streams.find((s) => s.index === streamIndex)
 
         if (!stream) {
           release(callback, new TrackPropertiesMissingStreamError())
@@ -209,6 +220,7 @@ class TrackProperties extends Map {
           this.clear()
           this.set('format', format)
           this.set('stream', stream)
+          this.streamIndex = stream.index
 
           release(callback, null)
         }

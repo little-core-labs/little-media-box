@@ -52,6 +52,22 @@ class TrackError extends Error {
       this.code = this.constructor.code
     }
   }
+
+  /**
+   * The `TrackError` error code.
+   * @accessor
+   */
+  get code() {
+    return 'TRACK_ERROR'
+  }
+
+  /**
+   * The `TrackError` error message.
+   * @accessor
+   */
+  get message() {
+    return 'An unknown error has occurred with the track.'
+  }
 }
 
 /**
@@ -81,6 +97,33 @@ class TrackValidationError extends TrackError {
 }
 
 /**
+ * The `TrackTypeMismatchError` class represents an error that occurs
+ * when the track type does not match the codec type specified in the
+ * stream properties.
+ * @public
+ * @class
+ * @extends TrackError
+ */
+class TrackTypeMismatchError extends TrackError {
+
+  /**
+   * The `TrackTypeMismatchError` error code.
+   * @accessor
+   */
+  get code() {
+    return 'TRACK_TYPE_MISMATCH_ERROR'
+  }
+
+  /**
+   * The `TrackTypeMismatchError` error message.
+   * @accessor
+   */
+  get message() {
+    return 'Track type does not match stream type.'
+  }
+}
+
+/**
  * The `TrackPropertiesError` class represents an extended `TrackError`
  * class that represents a base class for various errors thrown in the
  * `TrackProperties` class.
@@ -88,7 +131,16 @@ class TrackValidationError extends TrackError {
  * @class
  * @extends TrackError
  */
-class TrackPropertiesError extends TrackError { }
+class TrackPropertiesError extends TrackError {
+
+  /**
+   * The `TrackPropertiesError` error code.
+   * @accessor
+   */
+  get code() {
+    return 'TRACK_PROPERTIES_ERROR'
+  }
+}
 
 /**
  * The `TrackPropertiesMissingStreamError` class represents an error that
@@ -154,5 +206,6 @@ module.exports = {
   TrackPropertiesError,
   TrackPropertiesMissingFormatError,
   TrackPropertiesMissingStreamError,
+  TrackTypeMismatchError,
   TrackValidationError
 }
