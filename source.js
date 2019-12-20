@@ -69,7 +69,6 @@ class Source extends Resource {
         cwd: opts.cwd || source.cwd,
         duration: opts.duration || source.duration,
         byteLength: opts.byteLength || source.byteLength,
-        demuxOptions: opts.demuxOptions || source.demuxOptions,
         stream,
       })
     }
@@ -100,7 +99,15 @@ class Source extends Resource {
     this.stream = opts.stream || null
     this.duration = opts.duration || 0
     this.byteLength = opts.byteLength || 0
-    this.demuxOptions = createDemuxOutputOptions(opts.demuxOptions)
+  }
+
+  /**
+   * The absolute path name of the source uri.
+   * @accessor
+   * @type {String}
+   */
+  get pathname() {
+    return url.parse(this.uri).pathname
   }
 
   /**
