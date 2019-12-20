@@ -14,18 +14,6 @@ const url = require('url')
 const fs = require('fs')
 
 /**
- * Creates and returns an array of output options
- * for the source demuxer.
- * @private
- * @param {?(Array)} extras
- * @return {Array}
- */
-function createDemuxOutputOptions(extras) {
-  const options = ['-c', 'copy', '-f', 'matroska']
-  return Array.from(new Set(options.concat(extras || [])))
-}
-
-/**
  * The `Source` class represents a container for a HTTP
  * resource or local file that can be consumed as a readable
  * stream.
@@ -48,6 +36,7 @@ class Source extends Resource {
    */
   static from (uri, opts) {
     let source = null
+    let stream =  null
 
     if (!opts || 'object' !== typeof opts) {
       opts = {}
@@ -64,6 +53,14 @@ class Source extends Resource {
       source = uri.source
     }
 
+    // possibly a `Stream` instance or something like that
+    // looks like one (quack)
+    if (uri && uri.on && uri.push && uri.pipe) {
+      stream = uri
+      source = stream.source || null
+      uri = stream.uri || null
+    }
+
     // create a new `Source` from existing instance copying
     // properties over allowing input `opts` to take precedence
     if (source) {
@@ -72,7 +69,8 @@ class Source extends Resource {
         cwd: opts.cwd || source.cwd,
         duration: opts.duration || source.duration,
         byteLength: opts.byteLength || source.byteLength,
-        demuxOptions: opts.demuxOptions || source.demuxOptions
+        demuxOptions: opts.demuxOptions || source.demuxOptions,
+        stream,
       })
     }
 
@@ -85,9 +83,9 @@ class Source extends Resource {
    * @param {?(Object)} opts
    * @param {?(String)} opts.id
    * @param {?(String)} opts.cwd
+   * @param {?(Stream)} opts.stream
    * @param {?(Number)} opts.duration
    * @param {?(Number)} opts.byteLength
-   * @param {?(Array)} opts.demuxOptions
    */
   constructor(uri, opts) {
     super()
@@ -99,6 +97,7 @@ class Source extends Resource {
     this.id = opts.id || uuid()
     this.uri = uri
     this.cwd = opts.cwd || process.cwd()
+    this.stream = opts.stream || null
     this.duration = opts.duration || 0
     this.byteLength = opts.byteLength || 0
     this.demuxOptions = createDemuxOutputOptions(opts.demuxOptions)
@@ -113,6 +112,15 @@ class Source extends Resource {
   _open(callback) {
     if (this.byteLength > 0) {
       return process.nextTick(callback, null)
+    }
+
+    // try attached stream
+    if (this.stream) {
+      ffmpeg(this.stream).ffprobe((err, info) => {
+        if (err) { return callback() }
+        this.byteLength = parseInt(info.format.size)
+        callback(null)
+      })
     }
 
     const uri = url.parse(this.uri)
@@ -169,7 +177,8 @@ class Source extends Resource {
 
     getUri(uri, onstream)
 
-    return readStream
+    // set `source` so `Source.from(readStream)` return a valid source with state intact
+    return Object.assign(readStream, { source: this })
 
     function onstream(err, sourceStream) {
       if (err) { return readStream.emit('error', err) }
