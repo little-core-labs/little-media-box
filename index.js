@@ -1,84 +1,60 @@
-const Asset = require('./asset')
-const Source = require('./source')
-const Target = require('./target')
-const { AudioTrack, SubtitleTrack, VideoTrack, Track } = require('./track')
+const { ffmpeg, FFPROBE_BIN_PATH, FFMPEG_BIN_PATH } = require('./ffmpeg')
+const { createDemuxStream, demux } = require('./demux')
+const { MKVMERGE_BIN_PATH } = require('./mkvmerge')
+const { X264_BIN_PATH } = require('./x264')
+const { configure } = require('./configure')
+const { Delivery } = require('./delivery')
+const extensions = require('./extensions')
+const { Source } = require('./source')
+const { Target } = require('./target')
+const { Asset } = require('./asset')
+const constants = require('./constants')
+const settings = require('./settings')
+const { mux } = require('./mux')
+const targets = require('./targets')
+const iso639 = require('./iso-639')
 
-const nanoprocess = require('nanoprocess')
-const path = require('path')
-const uuidv4 = require('uuid/v4')
+const {
+  AudioTrack,
+  SubtitleTrack,
+  Track,
+  TrackError,
+  TrackPropertiesError,
+  TrackPropertiesMissingFormatError,
+  TrackPropertiesMissingStreamError,
+  TrackValidationError,
+  VideoTrack
+} = require('./track')
 
-class Delivery {
-  constructor(sources, opts = {}) {
-    if (sources instanceof Source) {
-      this.sources = [sources]
-    } else if (Array.isArray(sources) && sources.every(s => s instanceof Source)) {
-      this.sources = sources
-    } else {
-      throw new Error('Invalid sources provided')
-    }
-    this.opts = opts
-  }
+/**
+ * Module exports.
+ */
+module.exports = {
+  Asset,
+  AudioTrack,
+  configure,
+  constants,
+  createDemuxStream,
+  Delivery,
+  demux,
+  extensions,
+  ffmpeg,
+  FFPROBE_BIN_PATH,
+  FFMPEG_BIN_PATH,
+  iso639,
+  MKVMERGE_BIN_PATH,
+  mux,
+  settings,
+  Source,
+  SubtitleTrack,
+  Target,
+  targets,
+  Track,
+  TrackError,
+  TrackPropertiesError,
+  TrackPropertiesMissingFormatError,
+  TrackPropertiesMissingStreamError,
+  TrackValidationError,
+  VideoTrack,
+  X264_BIN_PATH,
 }
-
-class Package {
-  constructor(tracks, opts = {}) {
-    const opt = opts //copy
-    this.targets = []
-    this.uuid = uuidv4()
-    if (tracks instanceof Track) {
-      this.tracks = [tracks]
-    } else if (Array.isArray(tracks) && tracks.every(t => t instanceof Track)) {
-      this.tracks = tracks.sort((track1, track2) => {
-        return track1.properties.index - track2.properties.index
-      })
-    } else {
-      throw new Error('Invalid tracks provided')
-    }
-
-    if (opt.targets) {
-      if (opt.targets instanceof Target) {
-        this.targets = [opt.targets]
-      } else if (Array.isArray(opt.targets) &&
-        opt.targets.every(t => t instanceof Target)
-      ) {
-        this.targets.push(opt.targets)
-      }
-    }
-
-    this.opts = opt
-
-    this.muxes = []
-    this.demuxes = []
-  }
-  mux(options = {}) {
-    return new Promise((resolve, reject) => {
-      const opts = options //copy
-      const outputUrl = opts.outputUrl || 'mux_output.mkv'
-
-      const tracks = this.tracks //copy
-      const cmdOpts = ['-o', outputUrl, tracks.shift().source.uri]
-      cmdOpts.push(
-        ...tracks.filter(t => t.source.uri !== cmdOpts[2]).map(m => `+${m.source.uri}`)
-      )
-      const muxCmd = nanoprocess('mkvmerge', cmdOpts)
-
-      muxCmd.open((err) => {
-        if (err) { reject(err) }
-        muxCmd.process.on('close', (exitCode) => {
-          console.log('closed mux command with code', exitCode)
-          if (exitCode == 0) {
-            this.muxes.push(outputUrl)
-            resolve(outputUrl)
-          } else {
-            reject('mkvmerge failed with exit code', exitCode)
-          }
-        })
-      })
-    })
-  }
-  assignTargets(targets) {
-    this.targets.push(targets)
-  }
-}
-
-module.exports = { Asset, AudioTrack, Delivery, Package, Source, SubtitleTrack, Target, Track, VideoTrack }
