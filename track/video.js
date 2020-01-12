@@ -62,7 +62,7 @@ class VideoTrack extends Track {
    */
   _validate(callback) {
     const { stream } = this.properties
-    const exceptions = []
+    const messages = []
 
     if (NOT_AVAILABLE === stream.r_frame_rate) {
       messages.push('Stream frame rate not available.')
@@ -76,14 +76,14 @@ class VideoTrack extends Track {
       messages.push('Stream frame rate cannot be less than 1.')
     }
 
-    if (exceptions.length) {
+    if (messages.length) {
       const header = (
         `${messages.length} validation ` +
         `${messages.length > 1 ? 'errors' : 'error'} ` +
         `occurred`
       )
 
-      const message = header + emessages.join(' ')
+      const message = header + messages.join(' ')
       callback(new TrackValidationError(message))
     } else {
       callback(null)
