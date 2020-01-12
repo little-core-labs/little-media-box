@@ -53,9 +53,13 @@ class Source extends Resource {
       source = uri.source
     }
 
-    // possibly a `Stream` instance or something like that
     // looks like one (quack)
-    if (uri && uri.on && uri.push && uri.pipe) {
+    // possibly a `Stream` instance or something like that given
+    // as `opts` or `uri
+    if (opts.push &&  opts.pipe) {
+      stream = opts
+      source = stream.source || null
+    } else if (uri && uri.on && uri.push && uri.pipe) {
       stream = uri
       source = stream.source || null
       uri = stream.uri || null
