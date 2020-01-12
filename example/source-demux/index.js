@@ -47,7 +47,7 @@ source.open((err) => {
       probe.format.tags.title,
       probe.format.tags.artist)
 
-    const progress = new Progress(`> demux: | :timecode | (:frames/:nb_frames frames) [:bar] :percent`, {
+    const progress = new Progress(`> demux: [:timecode] (:frames/:nb_frames frames) (:rate fps) [:bar] :percent`, {
       width: 32,
       total: probe.streams[0].nb_frames
     })
