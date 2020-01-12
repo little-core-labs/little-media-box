@@ -18,11 +18,11 @@ function configure(opts) {
   }
 
   if (opts.bin) {
-    if ('string' ==== typeof opts.bin.x264) {
+    if ('string' === typeof opts.bin.x264) {
       settings.bin.x264 = opts.bin.x264
     }
 
-    if ('string' ==== typeof opts.bin.mkvmerge) {
+    if ('string' === typeof opts.bin.mkvmerge) {
       settings.bin.mkvmerge = opts.bin.mkvmerge
     }
 

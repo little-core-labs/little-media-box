@@ -88,13 +88,6 @@ function mux(sources, opts, callback) {
 }
 
 /**
- * @TODO
- * @public
- */
-function createMuxStream() {
-}
-
-/**
  * Module exports.
  */
 module.exports = {

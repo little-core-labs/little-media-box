@@ -1,0 +1,32 @@
+{
+  "limits": {
+    "codec": {
+      "audio": {
+      },
+      "video": {
+      }
+    }
+  },
+  "name": "mobile",
+  "enabled": [ ],
+  "options": {
+    "defaults": {
+      "audio": {
+        "channels": 2,
+        "codec": [
+          "aac"
+        ],
+        "sampleRate": 48000
+      },
+      "container": {
+        "trackCount": {
+          "video": 1,
+          "audio": 1
+        }
+      },
+      "video": {
+        "codec": [ "h264_nvenc", "libx264" ]
+      }
+    }
+  }
+}
