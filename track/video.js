@@ -48,15 +48,6 @@ class VideoTrack extends Track {
   }
 
   /**
-   * `VideoTrack` class constructor.
-   * @param {Source} source
-   * @param {?(Object)} opts
-   */
-  constructor(source, opts) {
-    super(source, DEFAULT_STREAM_INDEX, opts)
-  }
-
-  /**
    * Internal validation for a video track.
    * @param {Function}
    */

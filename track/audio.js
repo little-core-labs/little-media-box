@@ -45,15 +45,6 @@ class AudioTrack extends Track {
   }
 
   /**
-   * `AudioTrack` class constructor.
-   * @param {Source} source
-   * @param {?(Object)} opts
-   */
-  constructor(source, opts) {
-    super(source, DEFAULT_STREAM_INDEX, opts)
-  }
-
-  /**
    * The number of channels in the track's source stream.
    * @accessor
    * @type {?(Number)}

@@ -43,15 +43,6 @@ class SubtitleTrack extends Track {
   static get STREAM_TYPE() {
     return STREAM_TYPE
   }
-
-  /**
-   * `SubtitleTrack` class constructor.
-   * @param {Source} source
-   * @param {?(Object)} opts
-   */
-  constructor(source, opts) {
-    super(source, DEFAULT_STREAM_INDEX, opts)
-  }
 }
 
 /**
