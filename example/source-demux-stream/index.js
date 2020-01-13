@@ -1,6 +1,4 @@
-const { AudioTrack, VideoTrack } = require('../../track')
-const { createDemuxStream } = require('../../demux')
-const { Source } = require('../../source')
+const { Source, AudioTrack, VideoTrack, createDemuxStream } =  require('../../.')
 const path = require('path')
 const pump = require('pump')
 const fs = require('fs')

@@ -1,5 +1,4 @@
-const { Delivery } = require('../../delivery')
-const { Source } = require('../../source')
+const { Delivery, Source } = require('../../.')
 
 const uri = 'http://distribution.bbb3d.renderfarming.net/video/mp4/bbb_sunflower_1080p_60fps_normal.mp4'
 

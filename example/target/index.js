@@ -1,4 +1,4 @@
-const { Target } = require('../../target')
+const { Target } = require('../../.')
 
 const target = new Target('ps4')
 target.ready((err) => {
