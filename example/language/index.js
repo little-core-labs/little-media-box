@@ -11,6 +11,7 @@ console.log('Looking for romance languages...', romanceLanguages)
 source.open((err) => {
   const romanceSubs = []
   function onprobe(err, data) {
+    const batch = new Batch()
     for (const stream of data.streams) {
       const language = stream.tags.language
       console.log(stream.index,
@@ -18,10 +19,16 @@ source.open((err) => {
         romanceLanguages.includes(stream.tags.language)
       )
       if (romanceLanguages.includes(language)) {
-        romanceSubs.push(SubtitleTrack.from(source, stream.index))
+        const track = SubtitleTrack.from(source, stream.index)
+        batch.push((next) => track.ready(next))
+        romanceSubs.push(track)
       }
     }
-    console.log(romanceSubs)
+
+    batch.end((err) => {
+      console.log('romance subtitles on tracks %s', romanceSubs.map((track) => track.streamIndex))
+      //console.log(romanceSubs)
+    })
   }
 
   source.probe(onprobe)
