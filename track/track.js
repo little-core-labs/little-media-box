@@ -32,11 +32,15 @@ class Track extends Resource {
    * URI string.
    * @static
    * @param {Source|String} source
-   * @param {?(Object)} opts
+   * @param {?(Object|Number)} opts
    * @param {?(Number)} opts.streamIndex
    * @return {Track}
    */
   static from(source, opts) {
+    if ('number' === typeof opts) {
+      opts = { streamIndex: opts }
+    }
+
     if (!opts || 'object' !== typeof opts) {
       opts = {}
     }
@@ -47,11 +51,7 @@ class Track extends Resource {
     // derive stream index from the class level property `DEFAULT_STREAM_INDEX`
     // where `opts.index` takes precedence and `0` is the default
     const { streamIndex = this.DEFAULT_STREAM_INDEX || 0 } = opts
-    return new this(
-      source,
-      'number' === typeof streamIndex ? streamIndex : 0,
-      opts
-    )
+    return new this(source, streamIndex, opts)
   }
 
   /**
@@ -82,17 +82,21 @@ class Track extends Resource {
    * @param {?(String)} opts.id
    */
   constructor(source, streamIndex, opts) {
+    super()
+
     if (!opts || 'object' !== typeof opts) {
       opts = {}
+    }
+
+    if ('number' !== typeof streamIndex || Number.isNaN(streamIndex)) {
+      streamIndex = this.constructor.DEFAULT_STREAM_INDEX
     }
 
     assert(source instanceof Source,
       'Expecting `source` to be an instance of `Source`.')
 
-    assert('number' === typeof streamIndex && streamIndex >= 0,
+    assert(streamIndex >= 0,
       'Expecting `streamIndex` to be >= 0. Got: ' + streamIndex)
-
-    super()
 
     this.id = opts.id || uuid()
     this.source = source
