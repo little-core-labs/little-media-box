@@ -6,20 +6,23 @@ const path = require('path')
 const romanceLanguages = [ 'fre', 'spa', 'por' ]
 const source = new Source(path.resolve(__dirname, 'example.mkv'))
 
-source.probe((err, probe) => {
-  const tracks = []
-  const batch = new Batch()
+console.log('Looking for romance languages...', romanceLanguages)
 
-  for (const stream of probe.streams) {
-    if ('subtitle' === stream.codec_type) {
-      const track = SubtitleTrack.from(source.uri, { streamIndex: stream.index })
-      tracks.push(track)
-      batch.push((next) => track.ready(next))
+source.open((err) => {
+  const romanceSubs = []
+  function onprobe(err, data) {
+    for (const stream of data.streams) {
+      const language = stream.tags.language
+      console.log(stream.index,
+        stream.tags.language,
+        romanceLanguages.includes(stream.tags.language)
+      )
+      if (romanceLanguages.includes(language)) {
+        romanceSubs.push(SubtitleTrack.from(source, stream.index))
+      }
     }
+    console.log(romanceSubs)
   }
 
-  batch.end((err) => {
-    if (err) { throw err }
-    console.log(tracks.map((track) => track.language));
-  })
+  source.probe(onprobe)
 })
