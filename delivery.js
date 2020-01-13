@@ -1,5 +1,6 @@
 const { EventEmitter } = require('events')
 const { Source } = require('./source')
+const { demux } = require('./demux')
 const { Pool } = require('nanoresource-pool')
 const assert = require('assert')
 const Batch = require('batch')
@@ -135,14 +136,14 @@ class Delivery extends Pool {
 
     for (const source of sources) {
       batch.push((next) => {
-        const demux = source.demux(opts, (err, outputs) => {
+        const demuxer = demux(source, opts, (err, outputs) => {
           if (err) { return next(err) }
           demuxes[source.uri] = outputs
           next(null)
         })
 
         const proxy = (event) => {
-          demux.on(event, (...args) => {
+          demuxer.on(event, (...args) => {
             emitter.emit(event, ...args.concat(source))
           })
         }
