@@ -1,7 +1,6 @@
+const { Source, demux } =  require('../../.')
 const prettyBytes = require('pretty-bytes')
-const { Source } = require('../../source')
 const prettyTime = require('pretty-ms')
-const { demux } = require('../../demux')
 const Timecode = require('smpte-timecode')
 const Progress = require('progress')
 const path = require('path')

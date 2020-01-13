@@ -1,6 +1,4 @@
-const { Source } = require('../../source')
-const { demux } = require('../../demux')
-const { mux } = require('../../mux')
+const { mux, demux, Source } = require('../../.')
 const path = require('path')
 
 const uri = 'http://distribution.bbb3d.renderfarming.net/video/mp4/bbb_sunflower_1080p_60fps_normal.mp4'

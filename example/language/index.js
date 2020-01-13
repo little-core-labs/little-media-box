@@ -1,5 +1,4 @@
-const { SubtitleTrack } = require('../../track')
-const { Source } = require('../../source')
+const { Source, SubtitleTrack } = require('../../.')
 const Batch = require('batch')
 const path = require('path')
 

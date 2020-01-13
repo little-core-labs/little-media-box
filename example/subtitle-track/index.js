@@ -1,4 +1,4 @@
-const { SubtitleTrack } = require('../../track')
+const { SubtitleTrack } = require('../../.')
 const path = require('path')
 
 const uri = path.resolve(__dirname, 'subtitles.srt')

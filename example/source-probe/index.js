@@ -1,5 +1,5 @@
 const prettyBytes = require('pretty-bytes')
-const { Source } = require('../../source')
+const { Source } = require('../../.')
 const path = require('path')
 
 const uri = 'http://distribution.bbb3d.renderfarming.net/video/mp4/bbb_sunflower_1080p_60fps_normal.mp4'
