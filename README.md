@@ -110,7 +110,7 @@ Extends [nanoresource][nr].
 
 Extends [nanoresource][nr].
 
-### `[track = new lmb.Track(source, [opts])][tr]`
+### [`track = new lmb.Track(source, [opts])`][tr]
 
 Extends [nanoresource][nr].
 
