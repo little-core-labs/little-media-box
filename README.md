@@ -50,53 +50,19 @@ delivery.ready(() => {
 })
 ```
 
+See [examples](./example) for additional use-cases.
+
 ## API
 
 ### `const lmb = require('little-media-box')`
 
 Import `little-media-box`.
 
-### `asset = new lmb.Asset(uri, [opts])`
-
-### `audioTrack = new lmb.AudioTrack(source, [opts])`
-
-### `settings = new lmb.configure([opts])`
-
-### `constants`
-
-Contains many constants used in various operations. See `./constants.js`.
-
 ### `demuxStream = lmb.createDemuxStream(source, [opts])`
 
 ### `delivery = new lmb.Delivery([opts])`
 
-### `demuxer = lmb.demux(source, [opts], callback)`
-
-### `lmb.extensions`
-
-???
-
-### `lmb.ffmpeg = require('fluent-ffmpeg')`
-
-Forward require of [`fluent-ffmpeg`](https://github.com/fluent-ffmpeg/node-fluent-ffmpeg).
-
-### `lmb.FFPROBE_BIN_PATH`
-
-Path to `ffprobe` bin. Forward require of [`ffprobe-static`](https://github.com/joshwnj/ffprobe-static).path.
-
-### `lmb.FFMPEG_BIN_PATH`
-
-Path to `ffmpeg` bin. Forward require of [`ffmpeg-static`](https://github.com/eugeneware/ffmpeg-static).path.
-
-### `lmb.MKVMERGE_BIN_PATH`
-
-Path to static binary for `mkvmerge` for the current operating system.
-
-### `lmb.X264_BIN_PATH`
-
-Path to static binary `x264`.
-
-### `{1: iso6391, 2: iso6392, 2: iso6393} = lmb.iso639`
+### `lmb.demux(source, [opts], callback)`
 
 ### `lmb.mux(sources, [opts], callback)`
 
@@ -115,7 +81,36 @@ A settings object containing a `bin` object with the following properties:
 }
 ```
 
+### `settings = new lmb.configure([opts])`
+
+### `{mobile, ps4, vr, web} = lmb.targets`
+
+Settings for various targets.
+
+### [`lmb.constants`](./constants.js)
+
+Contains many constants used in various operations.
+
+### `{1: iso6391, 2: iso6392, 2: iso6393} = lmb.iso639`
+
+
+### `lmb.extensions`
+
+???
+
+### [`asset = new lmb.Asset(uri, [opts])`](./asset.js)
+
+Extends [nanoresource][nr].
+
+### `target = new lmb.Target(name, [opts])`
+
+Extends [nanoresource][nr].
+
 ### `source = new lmb.Source(uri, [opts])`
+
+Extends [nanoresource][nr].
+
+### `[track = new lmb.Track(source, [opts])][tr]`
 
 Extends [nanoresource][nr].
 
@@ -123,17 +118,13 @@ Extends [nanoresource][nr].
 
 Extends [`Track`][tr].
 
-### `target = new lmb.Target(name, [opts])`
+### [`videoTrack = new lmb.VideoTrack(source, [opts])`](./track/video.js)
 
-Extends [nanoresource][nr].
+Extends [`Track`][tr].
 
-### `{mobile, ps4, vr, web} = lmb.targets`
+### [`audioTrack = new lmb.AudioTrack(source, [opts])`](./track/audio.js)
 
-Settings for various targets.
-
-### `[track = new lmb.Track(source, [opts])][tr]`
-
-Extends [nanoresource][nr].
+Extends Extends [`Track`][tr].
 
 ### `lmb.TrackError`
 
@@ -163,9 +154,26 @@ Track errors.  Contains the following custom properties:
 
 `code`: `TRACK_STREAM_NOT_FOUND`.
 
-### [`videoTrack = new lmb.VideoTrack(source, [opts])`](./track/video.js)
+### `lmb.ffmpeg = require('fluent-ffmpeg')`
 
-Extends [`Track`][tr].
+Forward require of [`fluent-ffmpeg`](https://github.com/fluent-ffmpeg/node-fluent-ffmpeg).
+
+### `lmb.FFPROBE_BIN_PATH`
+
+Path to `ffprobe` bin.
+
+### `lmb.FFMPEG_BIN_PATH`
+
+Path to `ffmpeg` bin.
+
+### `lmb.MKVMERGE_BIN_PATH`
+
+Path to static binary for `mkvmerge`.
+
+### `lmb.X264_BIN_PATH`
+
+Path to static binary `x264`.
+
 
 
 ## License
