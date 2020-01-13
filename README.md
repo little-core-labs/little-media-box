@@ -28,66 +28,149 @@ delivery.ready(() => {
   delivery.source(uri)
   delivery.probe(console.log)
   //delivery.demux(console.log).on('progress', console.log)
+  // {
+  //   'http://distribution.bbb3d.renderfarming.net/video/mp4/bbb_sunflower_1080p_60fps_normal.mp4': // {
+  //     streams: [ [Object], [Object], [Object] ],
+  //     format: {
+  //       filename: 'bbb_sunflower_1080p_60fps_normal.mp4',
+  //       nb_streams: 3,
+  //       nb_programs: 0,
+  //       format_name: 'mov,mp4,m4a,3gp,3g2,mj2',
+  //       format_long_name: 'QuickTime / MOV',
+  //       start_time: 0,
+  //       duration: 634.533333,
+  //       size: 'N/A',
+  //       bit_rate: 'N/A',
+  //       probe_score: 100,
+  //       tags: [Object]
+  //     },
+  //     chapters: []
+  //   }
+  // }
 })
 ```
 
 ## API
 
-### `const { Asset, AudioTrack, configure, constants, createDemuxStream, Delivery, demux, extensions, ffmpeg, FFPROBE_BIN_PATH, FFMPEG_BIN_PATH, iso639, MKVMERGE_BIN_PATH, mux, settings, Source, SubtitleTrack, Target, targets, Track, TrackError, TrackPropertiesError, TrackPropertiesMissingFormatError, TrackPropertiesMissingStreamError, TrackValidationError, VideoTrack, X264_BIN_PATH } = require('little-media-box')`
+### `const lmb = require('little-media-box')`
 
-Import the various peices of `little-media-box`.
+Import `little-media-box`.
 
-### `asset = new Asset(uri, [opts])`
+### `asset = new lmb.Asset(uri, [opts])`
 
-### `audioTrack = new AudioTrack(source, [opts])`
+### `audioTrack = new lmb.AudioTrack(source, [opts])`
 
-### `settings = new configure([opts])`
-
-### `settings = new configure([opts])`
+### `settings = new lmb.configure([opts])`
 
 ### `constants`
 
 Contains many constants used in various operations. See `./constants.js`.
 
-### `demuxStream = createDemuxStream(source, [opts])`
+### `demuxStream = lmb.createDemuxStream(source, [opts])`
 
-### `delivery = Delivery([opts])`
+### `delivery = new lmb.Delivery([opts])`
 
-### `demuxer = demux(source, [opts], callback)`
+### `demuxer = lmb.demux(source, [opts], callback)`
 
-### `extensions`
+### `lmb.extensions`
 
 ???
 
-### `ffmpeg = require('fluent-ffmpeg')`
+### `lmb.ffmpeg = require('fluent-ffmpeg')`
 
 Forward require of [`fluent-ffmpeg`](https://github.com/fluent-ffmpeg/node-fluent-ffmpeg).
 
-### `FFPROBE_BIN_PATH = require('ffprobe-static').path`
+### `lmb.FFPROBE_BIN_PATH`
 
 Path to `ffprobe` bin. Forward require of [`ffprobe-static`](https://github.com/joshwnj/ffprobe-static).path.
 
-### `FFMPEG_BIN_PATH = require('ffmpeg-static').path`
+### `lmb.FFMPEG_BIN_PATH`
 
 Path to `ffmpeg` bin. Forward require of [`ffmpeg-static`](https://github.com/eugeneware/ffmpeg-static).path.
 
-### `iso639`
-### `MKVMERGE_BIN_PATH`
-### `mux`
-### `settings`
-### `Source`
-### `SubtitleTrack`
-### `Target`
-### `targets`
-### `Track`
-### `TrackError`
-### `TrackPropertiesError`
-### `TrackPropertiesMissingFormatError`
-### `TrackPropertiesMissingStreamError`
-### `TrackValidationError`
-### `VideoTrack`
-### `X264_BIN_PATH`
+### `lmb.MKVMERGE_BIN_PATH`
+
+Path to static binary for `mkvmerge` for the current operating system.
+
+### `lmb.X264_BIN_PATH`
+
+Path to static binary `x264`.
+
+### `{1: iso6391, 2: iso6392, 2: iso6393} = lmb.iso639`
+
+### `lmb.mux(sources, [opts], callback)`
+
+The `callback` receives `error` and `output` arguments.
+
+### `{ bin } = lmb.settings`
+
+A settings object containing a `bin` object with the following properties:
+
+```js
+{
+  x264: X264_BIN_PATH,
+  ffmpeg: FFMPEG_BIN_PATH,
+  ffprobe: FFPROBE_BIN_PATH,
+  mkvmerge: MKVMERGE_BIN_PATH,
+}
+```
+
+### `source = new lmb.Source(uri, [opts])`
+
+Extends [nanoresource][nr].
+
+### [`subtitleTrack = new lmb.SubtitleTrack(source, [opts]`](./track/subtitle.js)
+
+Extends [`Track`][tr].
+
+### `target = new lmb.Target(name, [opts])`
+
+Extends [nanoresource][nr].
+
+### `{mobile, ps4, vr, web} = lmb.targets`
+
+Settings for various targets.
+
+### `[track = new lmb.Track(source, [opts])][tr]`
+
+Extends [nanoresource][nr].
+
+### `lmb.TrackError`
+
+Track errors.  Contains the following custom properties:
+
+```js
+{
+  track,
+  code: 'TRACK_ERROR'
+}
+
+```
+
+### `lmb.TrackPropertiesError`
+
+`code`: `TRACK_PROPERTIES_ERROR`.
+
+### `lmb.TrackPropertiesMissingFormatError`
+
+`code`: `TRACK_FORMAT_NOT_FOUND`.
+
+### `lmb.TrackPropertiesMissingStreamError`
+
+`code`: `TRACK_STREAM_NOT_FOUND`.
+
+### `lmb.TrackValidationError`
+
+`code`: `TRACK_STREAM_NOT_FOUND`.
+
+### [`videoTrack = new lmb.VideoTrack(source, [opts])`](./track/video.js)
+
+Extends [`Track`][tr].
+
 
 ## License
 
 MIT
+
+[nr]: https://github.com/mafintosh/nanoresource
+[tr]: ./track/track.js
