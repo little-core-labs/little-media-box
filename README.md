@@ -60,9 +60,17 @@ Import `little-media-box`.
 
 ### `demuxStream = lmb.createDemuxStream(source, [opts])`
 
+Extracts the media track from the given `source` and returns it as a
+`stream.Readable`.
+
 ### `delivery = new lmb.Delivery([opts])`
 
+An object, which provides one or more `Source` objects. Extends [nanoresource-pool][pr].
+
 ### `lmb.demux(source, [opts], callback)`
+
+Extracts one or more media tracks from the given source, and saves each to its
+own individual Matroska container.
 
 ### `lmb.mux(sources, [opts], callback)`
 
@@ -96,7 +104,9 @@ Contains many constants used in various operations.
 
 ### `lmb.extensions`
 
-???
+An extended `Array` that contains a set of lexicographically-sorted unique file
+extension names. Provides various methods like checking the file type for an
+extension.
 
 ### [`asset = new lmb.Asset(uri, [opts])`](./asset.js)
 
@@ -124,7 +134,7 @@ Extends [`Track`][tr].
 
 ### [`audioTrack = new lmb.AudioTrack(source, [opts])`](./track/audio.js)
 
-Extends Extends [`Track`][tr].
+Extends [`Track`][tr].
 
 ### `lmb.TrackError`
 
@@ -181,4 +191,5 @@ Path to static binary `x264`.
 MIT
 
 [nr]: https://github.com/mafintosh/nanoresource
+[pr]: https://github.com/little-core-labs/nanoresource-pool
 [tr]: ./track/track.js
