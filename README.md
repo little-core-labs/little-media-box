@@ -18,7 +18,7 @@ $ npm install little-media-box
 ## Usage
 
 ```js
-const { Delivery, Source } = require('little-media-box)
+const { Delivery, Source } = require('little-media-box')
 
 const uri = 'http://distribution.bbb3d.renderfarming.net/video/mp4/bbb_sunflower_1080p_60fps_normal.mp4'
 
