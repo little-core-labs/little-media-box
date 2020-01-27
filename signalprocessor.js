@@ -9,6 +9,7 @@ class SignalProcessor extends ffmpeg {
 
   constructor(source, opts) {
     super(source.uri, opts)
+    this.running = false
   }
 
   process(opts) {
@@ -16,13 +17,14 @@ class SignalProcessor extends ffmpeg {
       opts = {}
     }
 
-    this.on('start', () => console.log('starting ffmpeg command'))
-
     this.on('end', () => {
+      this.running = false
       this.emit('output-source', new Source(path.resolve(this._currentOutput.target)))
     })
 
     this.run()
+
+    this.running = true
   }
 }
 
