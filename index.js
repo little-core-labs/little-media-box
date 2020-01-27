@@ -6,12 +6,10 @@ const { configure } = require('./configure')
 const { Delivery } = require('./delivery')
 const extensions = require('./extensions')
 const { Source } = require('./source')
-const { Target } = require('./target')
 const { Asset } = require('./asset')
 const constants = require('./constants')
 const settings = require('./settings')
 const { mux } = require('./mux')
-const targets = require('./targets')
 const iso639 = require('./iso-639')
 
 const {
@@ -47,8 +45,6 @@ module.exports = {
   settings,
   Source,
   SubtitleTrack,
-  Target,
-  targets,
   Track,
   TrackError,
   TrackPropertiesError,
