@@ -91,10 +91,6 @@ A settings object containing a `bin` object with the following properties:
 
 ### `settings = new lmb.configure([opts])`
 
-### `{mobile, ps4, vr, web} = lmb.targets`
-
-Settings for various targets.
-
 ### [`lmb.constants`](./constants.js)
 
 Contains many constants used in various operations.
@@ -109,10 +105,6 @@ extension names. Provides various methods like checking the file type for an
 extension.
 
 ### [`asset = new lmb.Asset(uri, [opts])`](./asset.js)
-
-Extends [nanoresource][nr].
-
-### `target = new lmb.Target(name, [opts])`
 
 Extends [nanoresource][nr].
 
