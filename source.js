@@ -220,8 +220,11 @@ class Source extends Resource {
 
     this.ready((err) => {
       if (err) { return callback(err) }
+
+
       const { uri } = this
-      const stream = this.createReadStream(opts)
+      const stream = this.uri !== null && this.uri.includes('file://') ?
+        this.uri : this.createReadStream(opts)
 
       this.active()
       ffmpeg(stream).ffprobe((err, info) => {
