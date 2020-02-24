@@ -223,7 +223,7 @@ class Source extends Resource {
 
 
       const { uri } = this
-      const stream = this.uri.includes('file://') ?
+      const stream = this.uri !== undefined && this.uri.includes('file://') ?
         this.uri : this.createReadStream(opts)
 
       this.active()
