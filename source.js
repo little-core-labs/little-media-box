@@ -223,8 +223,9 @@ class Source extends Resource {
 
 
       const { uri } = this
-      const stream = this.uri !== null && this.uri.includes('file://') ?
-        this.uri : this.createReadStream(opts)
+      const stream = this.uri !== null && this.uri.includes('file://')
+        ? this.uri
+        : this.createReadStream(opts).on('error', callback)
 
       this.active()
       ffmpeg(stream).ffprobe((err, info) => {
