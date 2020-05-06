@@ -230,9 +230,13 @@ class Source extends Resource {
       this.active()
       ffmpeg(stream).ffprobe((err, info) => {
         this.inactive()
-        info.format.filename = info.format.filename === 'pipe:0' ?
-          path.basename(this.uri) :
-          info.format.filename
+
+        if (info && info.format) {
+          info.format.filename = info.format.filename === 'pipe:0'
+            ? path.basename(this.uri)
+            : info.format.filename
+        }
+
         callback(err, info)
       })
     })
