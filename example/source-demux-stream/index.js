@@ -3,7 +3,7 @@ const path = require('path')
 const pump = require('pump')
 const fs = require('fs')
 
-const uri = 'http://distribution.bbb3d.renderfarming.net/video/mp4/bbb_sunflower_1080p_60fps_normal.mp4'
+const uri = 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'
 const source = new Source(uri)
 const outputs = []
 

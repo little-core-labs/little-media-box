@@ -5,7 +5,7 @@ const Timecode = require('smpte-timecode')
 const Progress = require('progress')
 const path = require('path')
 
-const uri = 'http://distribution.bbb3d.renderfarming.net/video/mp4/bbb_sunflower_1080p_60fps_normal.mp4'
+const uri = 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'
 const source = new Source(uri)
 
 console.log('>  open: %s', uri)
@@ -41,10 +41,6 @@ source.open((err) => {
     }
 
     console.log('> probe: format: %s', probe.format.format_long_name)
-    console.log('> probe: format: %s', probe.format.tags.comment)
-    console.log('> probe: format: %s - %s',
-      probe.format.tags.title,
-      probe.format.tags.artist)
 
     const progress = new Progress(`> demux: [:timecode] (:frames/:nb_frames frames) (:rate fps) [:bar] :percent`, {
       width: 32,

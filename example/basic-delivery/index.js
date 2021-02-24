@@ -1,6 +1,6 @@
 const { Delivery, Source } = require('../../.')
 
-const uri = 'http://distribution.bbb3d.renderfarming.net/video/mp4/bbb_sunflower_1080p_60fps_normal.mp4'
+const uri = 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'
 
 const delivery = new Delivery()
 
