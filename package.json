@@ -13,7 +13,7 @@
     "batch": "^0.6.1",
     "binary-extensions": "^2.0.0",
     "debug": "^4.1.1",
-    "ffmpeg-ffprobe-static": "^4.3.1-rc.6",
+    "ffmpeg-ffprobe-static": "^4.4.0-rc.11",
     "ffmpeg-static": "^4.2.7",
     "fluent-ffmpeg": "^2.1.2",
     "get-uri": "^2.0.4",
